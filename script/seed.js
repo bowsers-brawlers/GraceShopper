@@ -1,12 +1,92 @@
 'use strict'
 
 const db = require('../server/db')
-const {User} = require('../server/db/models')
+
+const {User, Products} = require('../server/db/models')
 const userSeed = require('./UserSeed')
 
 async function seed() {
   await db.sync({force: true})
   console.log('db synced!')
+
+  const defaultProductImg =
+    'https://media.istockphoto.com/vectors/mockup-wine-bottle-vector-design-vector-id521084070?k=6&m=521084070&s=170667a&w=0&h=7rr67EPk11FEU_G3XLBCJbmfok48nOSnl7FRNsraqxg='
+
+  const products = await Promise.all([
+    Products.create({
+      name: 'Wine that is red',
+      description: '123',
+      price: 12.99,
+      quantity: 4,
+      imageUrl: defaultProductImg
+    }),
+
+    Products.create({
+      name: 'White Wine',
+      description: 'Wine that is white',
+      price: 12.99,
+      quantity: 4,
+      imageUrl: defaultProductImg
+    }),
+
+    Products.create({
+      name: 'Party Wine',
+      description: 'Wine for parties',
+      price: 21.99,
+      quantity: 4,
+      imageUrl: defaultProductImg
+    }),
+    Products.create({
+      name: 'Sad Wine',
+      description: 'Wine for when you are sad',
+      price: 11.99,
+      quantity: 4,
+      imageUrl: defaultProductImg
+    }),
+
+    Products.create({
+      name: 'Relxaing Wine',
+      description: 'Wine for when you are relaxing',
+      price: 31.99,
+      quantity: 4,
+      imageUrl: defaultProductImg
+    }),
+    Products.create({
+      name: 'Celabratory Wine',
+      description: 'Wine for celabrating',
+      price: 211.99,
+      quantity: 4,
+      imageUrl: defaultProductImg
+    }),
+    Products.create({
+      name: 'Wine',
+      description: 'Plain Wine',
+      price: 21.99,
+      quantity: 4,
+      imageUrl: defaultProductImg
+    }),
+    Products.create({
+      name: 'Green Wine',
+      description: 'Wine that is green',
+      price: 21.99,
+      quantity: 4,
+      imageUrl: defaultProductImg
+    }),
+    Products.create({
+      name: 'Blue Wine',
+      description: 'Wine that is blue',
+      price: 21.99,
+      quantity: 4,
+      imageUrl: defaultProductImg
+    }),
+    Products.create({
+      name: 'Purple Wine',
+      description: 'Wine that is purple',
+      price: 21.99,
+      quantity: 4,
+      imageUrl: defaultProductImg
+    })
+  ])
 
   const users = await Promise.all(
     userSeed.map(user => {
