@@ -15,18 +15,41 @@ describe('User model', () => {
 
       beforeEach(async () => {
         cody = await User.create({
+          firstName: 'cody',
+          lastName: 'Myers',
           email: 'cody@puppybook.com',
           password: 'bones'
         })
       })
 
       it('returns true if the password is correct', () => {
+        console.log(cody, 'THIS IS THE CONSOLE LOG FOR CODY!!!!!!!!!!!!!!!!!!')
         expect(cody.correctPassword('bones')).to.be.equal(true)
       })
 
       it('returns false if the password is incorrect', () => {
         expect(cody.correctPassword('bonez')).to.be.equal(false)
       })
-    }) // end describe('correctPassword')
-  }) // end describe('instanceMethods')
-}) // end describe('User model')
+    })
+
+    describe('default value', () => {
+      let cody
+
+      beforeEach(async () => {
+        cody = await User.create({
+          firstName: 'cody',
+          lastName: 'Myers',
+          email: 'cody@puppybook.com',
+          password: 'bones'
+        })
+      })
+      it('default value should be `false`', () => {
+        expect(cody.isAdmin).to.be.equal('false')
+      })
+    })
+
+    // end describe('correctPassword')
+  })
+  // end describe('instanceMethods')
+})
+// end describe('User model')
