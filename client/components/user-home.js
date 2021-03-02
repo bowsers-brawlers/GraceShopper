@@ -6,10 +6,10 @@ import {connect} from 'react-redux'
  * COMPONENT
  */
 export const UserHome = props => {
-  const {email} = props.email
-  const {imageUrl} = props.imageUrl
-  const {firstName} = props.firstName
-  const {lastName} = props.lastName
+  const {email, imageUrl, firstName, lastName} = props.user
+  //const {imageUrl} = props.imageUrl
+  //const {firstName} = props.firstName
+  //const {lastName} = props.lastName
   return (
     <div>
       <h3>Welcome, {email}</h3>
