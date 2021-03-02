@@ -3,7 +3,9 @@ import {connect} from 'react-redux'
 import {withRouter, Route, Switch} from 'react-router-dom'
 import PropTypes from 'prop-types'
 import {Login, Signup, UserHome} from './components'
-import {me} from './store'
+
+import AllProducts from './components/Products'
+import {fetchAllProducts} from './store/products'
 
 /**
  * COMPONENT
@@ -11,6 +13,7 @@ import {me} from './store'
 class Routes extends Component {
   componentDidMount() {
     this.props.loadInitialData()
+    console.log(this.props)
   }
 
   render() {
@@ -41,14 +44,15 @@ const mapState = state => {
   return {
     // Being 'logged in' for our purposes will be defined has having a state.user that has a truthy id.
     // Otherwise, state.user will be an empty object, and state.user.id will be falsey
-    isLoggedIn: !!state.user.id
+    isLoggedIn: !!state.user.id,
+    products: state.products
   }
 }
 
 const mapDispatch = dispatch => {
   return {
     loadInitialData() {
-      dispatch(me())
+      dispatch(fetchAllProducts())
     }
   }
 }
