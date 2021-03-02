@@ -30,3 +30,14 @@ router.get('/', async (req, res, next) => {
     next(err)
   }
 })
+
+router.get('/:userId', async (req, res, next) => {
+  try {
+    const user = User.findByPk(req.params.userId, {
+      attributes: ['id', 'email']
+    })
+    res.json(user)
+  } catch (err) {
+    next(err)
+  }
+})
