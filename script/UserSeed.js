@@ -1,4 +1,11 @@
 module.exports = [
+  {
+    email: 'alpay@email.com',
+    firstName: 'Alpay',
+    lastName: 'Aldemir',
+    password: 'bowser12345',
+    isAdmin: 'true'
+  },
   {email: 'cvidgeon0@amazon.co.uk', firstName: 'Gorton', lastName: 'Vidgeon'},
   {email: 'fbolesma1@cisco.com', firstName: 'Cridlin', lastName: 'Bolesma'},
   {email: 'fgame2@livejournal.com', firstName: 'Heberden', lastName: 'Game'},
