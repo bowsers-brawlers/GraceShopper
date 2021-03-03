@@ -6,6 +6,13 @@ module.exports = [
     password: 'bowser12345',
     isAdmin: 'true'
   },
+  {
+    email: 'test@email.com',
+    firstName: 'Alpay',
+    lastName: 'Aldemir',
+    password: '123',
+    isAdmin: 'true'
+  },
   {email: 'cvidgeon0@amazon.co.uk', firstName: 'Gorton', lastName: 'Vidgeon'},
   {email: 'fbolesma1@cisco.com', firstName: 'Cridlin', lastName: 'Bolesma'},
   {email: 'fgame2@livejournal.com', firstName: 'Heberden', lastName: 'Game'},
