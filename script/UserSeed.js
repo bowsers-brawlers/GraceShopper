@@ -1,4 +1,32 @@
 module.exports = [
+  {
+    email: 'alpay@email.com',
+    firstName: 'Alpay',
+    lastName: 'Aldemir',
+    password: 'bowser12345',
+    isAdmin: 'false'
+  },
+  {
+    email: 'mark@email.com',
+    firstName: 'Mark',
+    lastName: 'Onofrio',
+    password: 'bowser12345',
+    isAdmin: 'true'
+  },
+  {
+    email: 'will@email.com',
+    firstName: 'Will',
+    lastName: 'Barksdale',
+    password: 'bowser12345',
+    isAdmin: 'true'
+  },
+  {
+    email: 'mihir@email.com',
+    firstName: 'Mihir',
+    lastName: 'Bommakanti',
+    password: 'bowser12345',
+    isAdmin: 'true'
+  },
   {email: 'cvidgeon0@amazon.co.uk', firstName: 'Gorton', lastName: 'Vidgeon'},
   {email: 'fbolesma1@cisco.com', firstName: 'Cridlin', lastName: 'Bolesma'},
   {email: 'fgame2@livejournal.com', firstName: 'Heberden', lastName: 'Game'},

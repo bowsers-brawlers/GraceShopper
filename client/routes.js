@@ -3,6 +3,11 @@ import {connect} from 'react-redux'
 import {withRouter, Route, Switch} from 'react-router-dom'
 import PropTypes from 'prop-types'
 import {Login, Signup, UserHome} from './components'
+
+import AllUsers from './components/AllUsers'
+import AllProducts from './components/Products'
+
+import {fetchAllProducts} from './store/products'
 import {me} from './store'
 
 /**
@@ -14,17 +19,26 @@ class Routes extends Component {
   }
 
   render() {
-    const {isLoggedIn} = this.props
-
+    const {isLoggedIn, loggedInUserId} = this.props
     return (
       <Switch>
         {/* Routes placed here are available to all visitors */}
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />
+        <Route
+          path="/home"
+          render={() => <AllProducts products={this.props.products} />}
+        />
         {isLoggedIn && (
           <Switch>
             {/* Routes placed here are only available after logging in */}
             <Route path="/home" component={UserHome} />
+            <Route
+              path="/all-users"
+              render={routeProps => (
+                <AllUsers {...routeProps} loggedInUserId={loggedInUserId} />
+              )}
+            />
           </Switch>
         )}
         {/* Displays our Login component as a fallback */}
@@ -41,13 +55,16 @@ const mapState = state => {
   return {
     // Being 'logged in' for our purposes will be defined has having a state.user that has a truthy id.
     // Otherwise, state.user will be an empty object, and state.user.id will be falsey
-    isLoggedIn: !!state.user.id
+    isLoggedIn: !!state.user.id,
+    loggedInUserId: state.user.id,
+    products: state.products
   }
 }
 
 const mapDispatch = dispatch => {
   return {
     loadInitialData() {
+      dispatch(fetchAllProducts())
       dispatch(me())
     }
   }
