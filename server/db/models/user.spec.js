@@ -23,7 +23,6 @@ describe('User model', () => {
       })
 
       it('returns true if the password is correct', () => {
-        console.log(cody, 'THIS IS THE CONSOLE LOG FOR CODY!!!!!!!!!!!!!!!!!!')
         expect(cody.correctPassword('bones')).to.be.equal(true)
       })
 
