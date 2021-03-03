@@ -3,8 +3,8 @@ const db = require('../index')
 const Products = db.model('products')
 
 describe('Products Model', () => {
-  //before(() => db.sync({ force: true }));
-  //afterEach(() => db.sync({ force: true }));
+  before(() => db.sync({force: true}))
+  afterEach(() => db.sync({force: true}))
 
   it('has fields name, description, price, quantity & imageUrl', async () => {
     const product = await Products.create({
