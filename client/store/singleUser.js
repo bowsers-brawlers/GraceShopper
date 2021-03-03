@@ -22,7 +22,7 @@ const initialState = {
 export default (state = initialState, action) => {
   switch (action.type) {
     case GET_SINGLE_USER:
-      return action.user
+      return {...state, currentUser: action.user}
     default:
       return state
   }

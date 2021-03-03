@@ -3,7 +3,9 @@ import {connect} from 'react-redux'
 import {fetchSingleUser} from '../store/singleUser'
 
 class SingleUser extends React.Component {
-  componenetDidMount() {
+  componentDidMount() {
+    console.log(this.props)
+    console.log('single user mounted')
     try {
       const userId = this.props.match.params.userId
       this.props.loadSingleUser(userId)
@@ -12,12 +14,14 @@ class SingleUser extends React.Component {
     }
   }
   render() {
+    console.log('props--------', this.props)
+
     return (
       <div>
-        <div>{this.props.state.currentUser.firstName}</div>
-        <div>{this.props.state.currentUser.lastName}</div>
-        <div>{this.props.state.currentUser.email}</div>
-        <div>{this.props.state.currentUser.imageUrl}+</div>
+        <div>{this.props.currentUser.firstName}</div>
+        <div>{this.props.currentUser.lastName}</div>
+        <div>{this.props.currentUser.email}</div>
+        <div>{this.props.currentUser.imageUrl}+</div>
       </div>
     )
   }
@@ -30,7 +34,7 @@ const mapDispatch = dispatch => {
 }
 const mapState = state => {
   return {
-    state: state.singleUser
+    currentUser: state.singleUser.currentUser
   }
 }
 export default connect(mapState, mapDispatch)(SingleUser)

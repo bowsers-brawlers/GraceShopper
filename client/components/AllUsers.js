@@ -22,7 +22,7 @@ class AllUsers extends React.Component {
     if (this.props.user.isAdmin === 'false') {
       return <Redirect to="/home" />
     } else {
-      console.log('All Users ----------------', this.props.allUsers)
+      console.log('All Users NEW----------------', this.props.allUsers)
       return (
         <div id="all-users-container">
           <div>You are an Admin!</div>
