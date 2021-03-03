@@ -10,8 +10,8 @@ describe('Products Express routes', () => {
   })
 
   describe('GET_ALL_PRODUCTS /api/products/', () => {
-    beforeEach(() => {
-      Products.bulkCreate([
+    beforeEach(async () => {
+      await Products.bulkCreate([
         {
           name: 'Wine that is red',
           description: '123',
@@ -44,6 +44,7 @@ describe('Products Express routes', () => {
     })
     it('Should return 3 products', async () => {
       const res = await request(app).get('/api/products')
+      // console.log("RES BODY:::", res.body)
       expect(res.body)
         .to.be.an('array')
         .with.lengthOf(3)
@@ -51,8 +52,8 @@ describe('Products Express routes', () => {
   })
 
   describe('GET_SINGLE_PRODUCT /api/products/:productsId', () => {
-    beforeEach(() => {
-      Products.bulkCreate([
+    beforeEach(async () => {
+      await Products.bulkCreate([
         {
           name: 'Wine that is red',
           description: '123',
