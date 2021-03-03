@@ -4,6 +4,27 @@ module.exports = [
     firstName: 'Alpay',
     lastName: 'Aldemir',
     password: 'bowser12345',
+    isAdmin: 'false'
+  },
+  {
+    email: 'mark@email.com',
+    firstName: 'Mark',
+    lastName: 'Onofrio',
+    password: 'bowser12345',
+    isAdmin: 'true'
+  },
+  {
+    email: 'will@email.com',
+    firstName: 'Will',
+    lastName: 'Barksdale',
+    password: 'bowser12345',
+    isAdmin: 'true'
+  },
+  {
+    email: 'mihir@email.com',
+    firstName: 'Mihir',
+    lastName: 'Bommakanti',
+    password: 'bowser12345',
     isAdmin: 'true'
   },
   {
