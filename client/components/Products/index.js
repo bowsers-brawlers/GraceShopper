@@ -1,18 +1,23 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import PropTypes from 'prop-types'
+import {Link} from 'react-router-dom'
 
 export function AllProducts({products}) {
   if (products.length) {
     return products.map(product => (
       <section key={product.id}>
-        <div>{product.name}</div>
+        <div>
+          <Link to={`/products/${product.id}`}>
+            <img src={product.imageUrl} alt={product.name} width="200px" />
+          </Link>
+        </div>
+        <div>
+          <Link to={`/products/${product.id}`}>{product.name}</Link>
+        </div>
         <div>{product.description}</div>
         <div>{product.price}</div>
         <div>{product.quantity}</div>
-        <div>
-          <img src={product.imageUrl} alt={product.name} width="200px" />
-        </div>
       </section>
     ))
   } else {
