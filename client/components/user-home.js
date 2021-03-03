@@ -6,6 +6,7 @@ import {connect} from 'react-redux'
  * COMPONENT
  */
 export const UserHome = props => {
+  console.log(props)
   const {email} = props.email
   const {imageUrl} = props.imageUrl
   const {firstName} = props.firstName
