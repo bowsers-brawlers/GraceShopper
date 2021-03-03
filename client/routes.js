@@ -7,6 +7,7 @@ import {Login, Signup, UserHome} from './components'
 import AllUsers from './components/AllUsers'
 import SingleUser from './components/SingleUser'
 import AllProducts from './components/Products'
+import SingleProduct from './components/SingleProduct'
 
 import {fetchAllProducts} from './store/products'
 import {me} from './store'
@@ -29,6 +30,11 @@ class Routes extends Component {
         <Route
           path="/home"
           render={() => <AllProducts products={this.props.products} />}
+        />
+        <Route
+          path="/products/:productId"
+          component={SingleProduct}
+          // render={(routeProps) => <SingleProduct {...routeProps} />}
         />
         {isLoggedIn && (
           <Switch>

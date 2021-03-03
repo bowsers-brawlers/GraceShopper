@@ -2,31 +2,34 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {fetchSingleProduct} from '../store/singleProduct'
 
-class SingleProduct extends Component {
-  constructor(props) {
-    super(props)
-  }
+export class SingleProduct extends Component {
   componentDidMount() {
     const id = this.props.match.params.productId
     this.props.getSingleProduct(id)
   }
   render() {
     const product = this.props.singleProduct
-    console.log(this.props)
-    return (
-      <div>
-        {product.name}
-        {product.description}
-        {product.price}
-        {product.quantity}
-        <img src={product.imageUrl} />
-      </div>
-    )
+    if (product) {
+      return (
+        <div>
+          <h1>{product.name}</h1>
+          <h3>{product.description}</h3>
+          <h3> {product.price}</h3>
+          <h3>{product.quantity}</h3>
+          <img src={product.imageUrl} />
+          <div>
+            <button>BUY NOW</button>
+          </div>
+        </div>
+      )
+    } else {
+      return <div>Loading...</div>
+    }
   }
 }
 const mapState = state => {
   return {
-    singleProduct: state.singleProduct
+    singleProduct: state.singleProductReducer
   }
 }
 

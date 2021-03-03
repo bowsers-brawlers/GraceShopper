@@ -10,6 +10,7 @@ export const getSingleProduct = product => ({
 export const fetchSingleProduct = id => async dispatch => {
   try {
     const {data: product} = await axios.get(`/api/products/${id}`)
+    console.log('PRODUCT', product)
     dispatch(getSingleProduct(product))
   } catch (err) {
     console.log(err)
