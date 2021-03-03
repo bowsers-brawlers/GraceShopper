@@ -31,7 +31,7 @@ describe('User model', () => {
       })
     })
 
-    describe('default value for isAdmin', () => {
+    describe('default value for isAdminxz ', () => {
       let cody
 
       beforeEach(async () => {
