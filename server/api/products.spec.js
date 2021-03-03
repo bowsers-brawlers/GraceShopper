@@ -4,36 +4,94 @@ const db = require('../db')
 const app = require('../index')
 const Products = db.model('products')
 
-describe('Products routes', () => {
+describe('Products Express routes', () => {
   beforeEach(() => {
     return db.sync({force: true})
   })
 
-  describe('/api/products/', () => {
+  describe('GET_ALL_PRODUCTS /api/products/', () => {
     beforeEach(() => {
-      return Products.create({
-        name: 'Wine that is red',
-        description: '123',
-        price: 12.99,
-        quantity: 4,
-        imageUrl:
-          'https://media.istockphoto.com/vectors/mockup-wine-bottle-vector-design-vector-id521084070?k=6&m=521084070&s=170667a&w=0&h=7rr67EPk11FEU_G3XLBCJbmfok48nOSnl7FRNsraqxg='
-      })
+      Products.bulkCreate([
+        {
+          name: 'Wine that is red',
+          description: '123',
+          price: 12.99,
+          quantity: 4,
+          imageUrl: 'imageUrl'
+        },
+        {
+          name: 'Wine that is white',
+          description: 'White Wine',
+          price: 10.99,
+          quantity: 40,
+          imageUrl: 'imageUrl'
+        },
+        {
+          name: 'Wine that is purple',
+          description: 'Good purple wine',
+          price: 2.99,
+          quantity: 43,
+          imageUrl: 'imageUrl'
+        }
+      ])
     })
 
-    it('GET /api/products', async () => {
+    it('GET 200', async () => {
       const res = await request(app)
         .get('/api/products')
         .expect(200)
       expect(res.body).to.be.an('array')
     })
+    it('Should return 3 products', async () => {
+      const res = await request(app).get('/api/products')
+      expect(res.body)
+        .to.be.an('array')
+        .with.lengthOf(3)
+    })
+  })
 
-    it('GET /api/products/:productsId', async () => {
+  describe('GET_SINGLE_PRODUCT /api/products/:productsId', () => {
+    beforeEach(() => {
+      Products.bulkCreate([
+        {
+          name: 'Wine that is red',
+          description: '123',
+          price: 12.99,
+          quantity: 4,
+          imageUrl: 'imageUrl'
+        },
+        {
+          name: 'Wine that is white',
+          description: 'White Wine',
+          price: 10.99,
+          quantity: 40,
+          imageUrl: 'imageUrl'
+        },
+        {
+          name: 'Wine that is purple',
+          description: 'Good purple wine',
+          price: 2.99,
+          quantity: 43,
+          imageUrl: 'imageUrl'
+        }
+      ])
+    })
+    it('GET 200', async () => {
       const res = await request(app)
-        .get('/api/products/1')
+        .get('/api/products/3')
         .expect(200)
-
       expect(res.body).to.be.an('Object')
+    })
+
+    it('GET single product #3', async () => {
+      const res = await request(app)
+        .get('/api/products/3')
+        .expect(200)
+      expect(res.body).to.be.an('Object')
+      expect(res.body.name).to.equal('Wine that is purple')
+      expect(res.body.id).to.equal(3)
+      expect(res.body.price).to.equal(2.99)
+      expect(res.body.quantity).to.equal(43)
     })
   })
 })
