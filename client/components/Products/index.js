@@ -3,10 +3,9 @@ import {connect} from 'react-redux'
 import PropTypes from 'prop-types'
 
 export function AllProducts({products}) {
-  console.log(products)
   if (products.length) {
     return products.map(product => (
-      <section>
+      <section key={product.id}>
         <div>{product.name}</div>
         <div>{product.description}</div>
         <div>{product.price}</div>
@@ -16,6 +15,8 @@ export function AllProducts({products}) {
         </div>
       </section>
     ))
+  } else {
+    return 'No Products'
   }
 }
 const mapState = state => ({products: state.products})
