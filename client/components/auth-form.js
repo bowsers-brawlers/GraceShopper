@@ -1,14 +1,14 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import PropTypes from 'prop-types'
-import {auth} from '../store'
+import {authSignUp, authLogin} from '../store'
 
 /**
  * COMPONENT
  */
-const AuthForm = props => {
+const SignUp = props => {
   const {name, displayName, handleSubmit, error} = props
-
+  console.log(props)
   return (
     <div>
       <form onSubmit={handleSubmit} name={name}>
@@ -24,6 +24,34 @@ const AuthForm = props => {
           </label>
           <input name="lastName" type="text" />
         </div>
+        <div>
+          <label htmlFor="email">
+            <small>Email</small>
+          </label>
+          <input name="email" type="text" />
+        </div>
+        <div>
+          <label htmlFor="password">
+            <small>Password</small>
+          </label>
+          <input name="password" type="password" />
+        </div>
+        <div>
+          <button type="submit">{displayName}</button>
+        </div>
+        {error && error.response && <div> {error.response.data} </div>}
+      </form>
+      <a href="/auth/google">{displayName} with Google</a>
+    </div>
+  )
+}
+
+const Login = props => {
+  const {name, displayName, handleSubmit, error} = props
+  console.log(props)
+  return (
+    <div>
+      <form onSubmit={handleSubmit} name={name}>
         <div>
           <label htmlFor="email">
             <small>Email</small>
@@ -78,18 +106,37 @@ const mapDispatch = dispatch => {
       const password = evt.target.password.value
       const firstName = evt.target.firstName.value
       const lastName = evt.target.lastName.value
-      dispatch(auth(firstName, lastName, email, password, formName))
+      dispatch(authSignUp(firstName, lastName, email, password, formName))
     }
   }
 }
 
-export const Login = connect(mapLogin, mapDispatch)(AuthForm)
-export const Signup = connect(mapSignup, mapDispatch)(AuthForm)
+const mapDispatchLogin = dispatch => {
+  return {
+    handleSubmit(evt) {
+      evt.preventDefault()
+      const formName = evt.target.name
+      const email = evt.target.email.value
+      const password = evt.target.password.value
+      dispatch(authLogin(email, password, formName))
+    }
+  }
+}
+
+export const LoginComponent = connect(mapLogin, mapDispatchLogin)(Login)
+export const SignUpComponent = connect(mapSignup, mapDispatch)(SignUp)
 
 /**
  * PROP TYPES
  */
-AuthForm.propTypes = {
+SignUpComponent.propTypes = {
+  name: PropTypes.string.isRequired,
+  displayName: PropTypes.string.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
+  error: PropTypes.object
+}
+
+LoginComponent.propTypes = {
   name: PropTypes.string.isRequired,
   displayName: PropTypes.string.isRequired,
   handleSubmit: PropTypes.func.isRequired,
