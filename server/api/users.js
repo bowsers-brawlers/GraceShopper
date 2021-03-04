@@ -1,5 +1,6 @@
 const router = require('express').Router()
-const {User} = require('../db/models')
+
+const {User, Order, Products} = require('../db/models')
 module.exports = router
 
 // base path: /api/users
@@ -37,6 +38,40 @@ router.get('/:userId', async (req, res, next) => {
       attributes: ['id', 'email', 'firstName', 'lastName']
     })
     res.json(user)
+  } catch (err) {
+    next(err)
+  }
+})
+
+router.post('/:userId/orders', async (req, res, next) => {
+  try {
+    const [order, isMade] = await Order.findOrCreate({
+      where: {
+        customerId: req.params.userId,
+        isComplete: 'false'
+      }
+    })
+    const product = await Products.findByPk(req.body.id)
+
+    if (isMade) {
+      console.log('HELLLLOOOOOOOOO', isMade)
+      await order.addProduct(product, {
+        through: {quantity: req.body.quantity, price: product.price}
+      })
+
+      //await order.addProducts(product)
+      //const newOrder = await order.addProduct(product)
+      //console.log(newOrder, 'BODY')
+      const customer = await User.findByPk(req.params.userId)
+      const updatedCustomer = await customer.addOrder(order)
+      res.send(await order.getProducts())
+    } else {
+      //await order.addProducts(product)
+      await order.addProduct(product, {
+        through: {quantity: req.body.quantity, price: product.price}
+      })
+      res.send(await order.getProducts())
+    }
   } catch (err) {
     next(err)
   }
