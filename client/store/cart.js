@@ -1,17 +1,27 @@
 import axios from 'axios'
 
 // action type
-const ADD_TO_CART = 'ADD_TO_CART'
+const POPULATE_CART = 'POPULATE_CART'
 
 // action creator
 const _addToCart = productsInOrder => {
   return {
-    type: ADD_TO_CART,
+    type: POPULATE_CART,
     productsInOrder
   }
 }
 // thunk
 // *********** object passed into thunk needs: userId, productId, quantity ***********
+export const fetchCart = userId => {
+  return async dispatch => {
+    try {
+      const cart = (await axios.get(`/api/users/${userId}/orders`)).data
+      dispatch(_addToCart(cart))
+    } catch (error) {
+      console.log(error)
+    }
+  }
+}
 export const addToCart = product => {
   return async dispatch => {
     try {
@@ -20,24 +30,22 @@ export const addToCart = product => {
         id: product.productId,
         quantity: product.quantity
       }
-      const productsInOrder = (await axios.post(
-        `/api/users/${userId}/orders`,
-        body
-      )).data
-      dispatch(_addToCart(productsInOrder))
+      await axios.post(`/api/users/${userId}/orders`, body)
+      dispatch(fetchCart(userId))
     } catch (error) {
       console.log(error)
     }
   }
 }
+
 // reducer
 const initialState = {
-  cart: {}
+  cart: []
 }
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case ADD_TO_CART:
+    case POPULATE_CART:
       return {...state, cart: action.productsInOrder}
     default:
       return state

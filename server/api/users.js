@@ -1,6 +1,6 @@
 const router = require('express').Router()
 
-const {User, Order, Products} = require('../db/models')
+const {User, Order, Products, orderDetails} = require('../db/models')
 module.exports = router
 
 // base path: /api/users
@@ -43,7 +43,8 @@ router.get('/:userId', async (req, res, next) => {
   }
 })
 
-// add item to cart ------------------------------------------------------
+// POST add item to cart ------------------------------------------------------
+// order.getProducts() gets the products from the Product model (quantity does not represent quantity the user adds to cart)
 router.post('/:userId/orders', async (req, res, next) => {
   try {
     const [order, isMade] = await Order.findOrCreate({
@@ -53,7 +54,6 @@ router.post('/:userId/orders', async (req, res, next) => {
       }
     })
     const product = await Products.findByPk(req.body.id)
-
     if (isMade) {
       await order.addProduct(product, {
         through: {quantity: req.body.quantity, price: product.price}
@@ -64,15 +64,35 @@ router.post('/:userId/orders', async (req, res, next) => {
       //console.log(newOrder, 'BODY')
       const customer = await User.findByPk(req.params.userId)
       await customer.addOrder(order)
-      res.status(201).send(await order.getProducts())
     } else {
       //await order.addProducts(product)
       await order.addProduct(product, {
         through: {quantity: req.body.quantity, price: product.price}
       })
-      res.status(201).send(await order.getProducts())
     }
+    res.status(201).send(order)
   } catch (err) {
     next(err)
+  }
+})
+
+// GET items from cart ------------------------------------------
+router.get('/:userId/orders', async (req, res, next) => {
+  try {
+    const {userId} = req.params
+    const order = await Order.findOne({
+      where: {
+        userId: userId,
+        isComplete: 'false'
+      }
+    })
+    const productsInOrder = await orderDetails.findAll({
+      where: {
+        orderId: order.id
+      }
+    })
+    res.status(200).send(productsInOrder)
+  } catch (error) {
+    next(error)
   }
 })

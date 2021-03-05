@@ -68,7 +68,8 @@ export class SingleProduct extends Component {
 const mapState = state => {
   return {
     singleProduct: state.singleProductReducer,
-    user: state.user
+    user: state.user,
+    cart: state.cart.cart
   }
 }
 
