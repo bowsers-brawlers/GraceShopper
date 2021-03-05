@@ -5,11 +5,8 @@ import history from '../history'
  * ACTION TYPES
  */
 const GET_ALL_PRODUCTS = 'GET_ALL_PRODUCTS'
+const CREATE_PRODUCT = 'CREATE_PRODUCT'
 
-/**
- * INITIAL STATE
- */
-const allProducts = []
 /**
  * ACTION CREATORS
  */
@@ -17,6 +14,11 @@ const allProducts = []
 export const getAllProducts = products => ({
   type: GET_ALL_PRODUCTS,
   products
+})
+
+export const _createProduct = product => ({
+  type: CREATE_PRODUCT,
+  product
 })
 
 /**
@@ -31,6 +33,19 @@ export const fetchAllProducts = () => async dispatch => {
   }
 }
 
+export const createProduct = (product, history) => {
+  return async dispatch => {
+    const create = (await axios.post('/api/products/', product)).data
+    dispatch(_createProduct(create))
+    history.push('/home')
+  }
+}
+
+/**
+ * INITIAL STATE
+ */
+const allProducts = []
+
 /**
  * REDUCER
  */
@@ -38,6 +53,8 @@ export default function(state = allProducts, action) {
   switch (action.type) {
     case GET_ALL_PRODUCTS:
       return action.products
+    case CREATE_PRODUCT:
+      return [...state, action.product]
     default:
       return state
   }

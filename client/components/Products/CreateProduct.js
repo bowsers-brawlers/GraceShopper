@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {createProduct} from '../../store/singleProduct'
+import {createProduct} from '../../store/products'
 
 export class CreateProduct extends Component {
   constructor(props) {
@@ -31,7 +31,7 @@ export class CreateProduct extends Component {
   render() {
     const {name, description, quantity, price, imageUrl} = this.state
     const {handleSubmit, handleChange} = this
-    if (this.props.isAdmin === true) {
+    if (this.props.isAdmin === 'true') {
       return (
         <form id="product-form" onSubmit={handleSubmit}>
           <div className="inputField">
@@ -98,9 +98,6 @@ export class CreateProduct extends Component {
 
 const mapDispatch = (dispatch, {history}) => ({
   addProduct: product => dispatch(createProduct(product, history))
-})
-const mapState = state => ({
-  product: state.product
 })
 
 export default connect(null, mapDispatch)(CreateProduct)
