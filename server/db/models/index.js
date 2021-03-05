@@ -23,6 +23,9 @@ Order.belongsTo(User, {as: 'customer'})
 Order.belongsToMany(Products, {through: 'orderDetails'})
 Products.belongsToMany(Order, {through: 'orderDetails'})
 
+orderDetails.belongsTo(Products)
+Products.hasMany(orderDetails)
+
 // [ ORDER
 //   '_customGetters',    '_customSetters',
 //   'validators',        '_hasCustomGetters',
@@ -67,3 +70,30 @@ module.exports = {
   Order,
   orderDetails
 }
+/*
+'SELECT
+"orderDetails"."price",
+"orderDetails"."quantity",
+"orderDetails"."createdAt",
+"orderDetails"."updatedAt",
+"orderDetails"."orderId",
+"orderDetails"."productId",
+
+"product"."id" AS "product.id",
+"product"."name" AS "product.name",
+"product"."description" AS "product.description",
+"product"."price" AS "product.price",
+"product"."quantity" AS "product.quantity",
+"product"."imageUrl" AS "product.imageUrl",
+"product"."createdAt" AS "product.createdAt",
+"product"."updatedAt" AS "product.updatedAt"
+
+FROM "orderDetails" AS "orderDetails"
+
+INNER JOIN "products" AS "product"
+ON "orderDetails"."productId" = "product"."id"
+AND "orderDetails"."productId"
+
+WHERE "orderDetails"."orderId" = 1;'
+
+*/

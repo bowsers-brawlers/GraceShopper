@@ -1,5 +1,5 @@
 const router = require('express').Router()
-
+const Sequelize = require('sequelize')
 const {User, Order, Products, orderDetails} = require('../db/models')
 module.exports = router
 
@@ -86,12 +86,43 @@ router.get('/:userId/orders', async (req, res, next) => {
         isComplete: 'false'
       }
     })
+    // include Product model
     const productsInOrder = await orderDetails.findAll({
       where: {
         orderId: order.id
+      },
+      include: {
+        model: Products
       }
     })
     res.status(200).send(productsInOrder)
+  } catch (error) {
+    next(error)
+  }
+})
+
+router.put('/:userId/orders/:orderId', async (req, res, next) => {
+  try {
+    // update inventory quantity on order submission -------------------
+    // receive an array of objects of all products in order
+    // object should contain
+    // productId
+    // quantity
+    console.log('req.body', req.body)
+    const {order} = req.body
+    for (let i = 0; i < order.length; i++) {
+      const product = await Products.findByPk(order[i].productId)
+      await product.update({quantity: product.quantity - order[i].quantity})
+    }
+    // update isComplete to 'true' ---------------------------------------
+    const {orderId} = req.params
+    const completeOrder = await orderDetails.findAll({
+      where: {
+        orderId: orderId
+      }
+    })
+    await completeOrder.update({isComplete: 'true'})
+    res.sendStatus(200)
   } catch (error) {
     next(error)
   }
