@@ -19,3 +19,12 @@ router.get('/:productId', async (req, res, next) => {
     next(err)
   }
 })
+
+router.post('/', async (req, res, next) => {
+  try {
+    console.log(':::::: REQ BODY ! :::::::::: ', req)
+    res.status(201).send(await Products.create(req.body))
+  } catch (e) {
+    next(e)
+  }
+})

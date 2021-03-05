@@ -6,27 +6,36 @@ import {Link} from 'react-router-dom'
 export function AllProducts({products}) {
   if (products.length) {
     return products.map(product => (
-      <section key={product.id}>
-        <div>
-          <Link to={`/products/${product.id}`}>
-            <img src={product.imageUrl} alt={product.name} width="200px" />
-          </Link>
-        </div>
-        <div>
-          <Link to={`/products/${product.id}`}>{product.name}</Link>
-        </div>
-        <div>{product.description}</div>
-        <div>{product.price}</div>
-        <div>{product.quantity}</div>
+      <section key={product.id} className="product-container">
+        <Link to={`/products/${product.id}`}>
+          <div className="product">
+            <figure className="image is4by4">
+              <img src={product.imageUrl} alt={product.name} width="200px" />
+            </figure>
+            <div className="title">{product.name}</div>
+            <div className="product-price">${product.price}</div>
+          </div>
+        </Link>
       </section>
     ))
   } else {
     return 'No Products'
   }
 }
+
+export function AllProductsContainer({products}) {
+  return (
+    <main className="content">
+      <div className="all-products">
+        <AllProducts products={products} />
+      </div>
+    </main>
+  )
+}
+
 const mapState = state => ({products: state.products})
 
-export default connect(mapState)(AllProducts)
+export default connect(mapState)(AllProductsContainer)
 
 AllProducts.prototype = {
   products: PropTypes.shape({

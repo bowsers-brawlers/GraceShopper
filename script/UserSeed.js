@@ -29,10 +29,10 @@ module.exports = [
   },
   {
     email: 'test@email.com',
-    firstName: 'Alpay',
-    lastName: 'Aldemir',
+    firstName: 'Test',
+    lastName: 'Test',
     password: '123',
-    isAdmin: 'true'
+    isAdmin: 'false'
   },
   {email: 'cvidgeon0@amazon.co.uk', firstName: 'Gorton', lastName: 'Vidgeon'},
   {email: 'fbolesma1@cisco.com', firstName: 'Cridlin', lastName: 'Bolesma'},
