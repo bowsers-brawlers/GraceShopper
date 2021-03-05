@@ -13,8 +13,8 @@ const AddProductButton = ({isAdmin}) => {
 }
 
 const Navbar = ({handleClick, isLoggedIn, isAdmin}) => (
-  <div>
-    <h1>
+  <div className="section">
+    <h1 className="title">
       <Link to="/home">Wine</Link>
     </h1>
     <nav>

@@ -23,3 +23,64 @@ form div {
 #user-cell {
   border-style: groove;
 }
+
+/* All Products */
+.all-products {
+  display: grid;
+  grid-template-columns: auto auto auto;
+}
+@media (min-width: 769px) and (max-width: 1215px) {
+  .all-products {
+    grid-template-columns: auto auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .all-products {
+    grid-template-columns: auto;
+  }
+}
+
+.all-products .product-container {
+}
+.all-products .product-container .product {
+  max-width: 500px;
+}
+
+.product-container {
+  display: flex;
+  justify-content: center;
+  justify-items: center;
+
+  border: solid thin gray;
+  padding: 15px;
+}
+
+.product {
+  display: grid;
+  grid-template-columns: auto;
+  grid-template-rows: auto;
+  grid-template-areas:
+    'figure figure title title title'
+    'figure figure title title title'
+    'figure figure price price .';
+}
+.product .title {
+  grid-area: title;
+  font-size: 1.2rem;
+}
+
+.product figure {
+  grid-area: figure;
+}
+.product figure img {
+  width: 100%;
+  max-width: 175px;
+}
+
+.product .product-price {
+  grid-area: price;
+  font-size: 1.2rem;
+  border-radius: 50%;
+  padding: 0.2rem;
+}
