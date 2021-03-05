@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {withRouter, Route, Switch} from 'react-router-dom'
 import PropTypes from 'prop-types'
-import {UserHome, SignUpComponent, LoginComponent} from './components/auth-form'
+import {UserHome, Signup, Login} from './components/auth-form'
 
 import AllUsers from './components/AllUsers'
 import SingleUser from './components/SingleUser'
