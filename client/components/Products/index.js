@@ -16,7 +16,7 @@ export function AllProducts({products}) {
           <Link to={`/products/${product.id}`}>{product.name}</Link>
         </div>
         <div>{product.description}</div>
-        <div>{product.price}</div>
+        <div>{product.price / 100}</div>
         <div>{product.quantity}</div>
       </section>
     ))

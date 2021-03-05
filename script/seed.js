@@ -16,7 +16,7 @@ async function seed() {
     Products.create({
       name: 'Wine that is red',
       description: '123',
-      price: 12.99,
+      price: 1299,
       quantity: 4,
       imageUrl: defaultProductImg
     }),
@@ -24,7 +24,7 @@ async function seed() {
     Products.create({
       name: 'White Wine',
       description: 'Wine that is white',
-      price: 12.99,
+      price: 1299,
       quantity: 4,
       imageUrl: defaultProductImg
     }),
@@ -32,14 +32,14 @@ async function seed() {
     Products.create({
       name: 'Party Wine',
       description: 'Wine for parties',
-      price: 21.99,
+      price: 2199,
       quantity: 4,
       imageUrl: defaultProductImg
     }),
     Products.create({
       name: 'Sad Wine',
       description: 'Wine for when you are sad',
-      price: 11.99,
+      price: 1199,
       quantity: 4,
       imageUrl: defaultProductImg
     }),
@@ -47,42 +47,42 @@ async function seed() {
     Products.create({
       name: 'Relxaing Wine',
       description: 'Wine for when you are relaxing',
-      price: 31.99,
+      price: 3199,
       quantity: 4,
       imageUrl: defaultProductImg
     }),
     Products.create({
       name: 'Celabratory Wine',
       description: 'Wine for celabrating',
-      price: 211.99,
+      price: 21199,
       quantity: 4,
       imageUrl: defaultProductImg
     }),
     Products.create({
       name: 'Wine',
       description: 'Plain Wine',
-      price: 21.99,
+      price: 2199,
       quantity: 4,
       imageUrl: defaultProductImg
     }),
     Products.create({
       name: 'Green Wine',
       description: 'Wine that is green',
-      price: 21.99,
+      price: 2199,
       quantity: 4,
       imageUrl: defaultProductImg
     }),
     Products.create({
       name: 'Blue Wine',
       description: 'Wine that is blue',
-      price: 21.99,
+      price: 2199,
       quantity: 4,
       imageUrl: defaultProductImg
     }),
     Products.create({
       name: 'Purple Wine',
       description: 'Wine that is purple',
-      price: 21.99,
+      price: 2199,
       quantity: 4,
       imageUrl: defaultProductImg
     })

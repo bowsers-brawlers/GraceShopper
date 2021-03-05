@@ -43,6 +43,7 @@ router.get('/:userId', async (req, res, next) => {
   }
 })
 
+// add item to cart ------------------------------------------------------
 router.post('/:userId/orders', async (req, res, next) => {
   try {
     const [order, isMade] = await Order.findOrCreate({
@@ -54,7 +55,6 @@ router.post('/:userId/orders', async (req, res, next) => {
     const product = await Products.findByPk(req.body.id)
 
     if (isMade) {
-      console.log('HELLLLOOOOOOOOO', isMade)
       await order.addProduct(product, {
         through: {quantity: req.body.quantity, price: product.price}
       })
@@ -63,14 +63,14 @@ router.post('/:userId/orders', async (req, res, next) => {
       //const newOrder = await order.addProduct(product)
       //console.log(newOrder, 'BODY')
       const customer = await User.findByPk(req.params.userId)
-      const updatedCustomer = await customer.addOrder(order)
-      res.send(await order.getProducts())
+      await customer.addOrder(order)
+      res.status(201).send(await order.getProducts())
     } else {
       //await order.addProducts(product)
       await order.addProduct(product, {
         through: {quantity: req.body.quantity, price: product.price}
       })
-      res.send(await order.getProducts())
+      res.status(201).send(await order.getProducts())
     }
   } catch (err) {
     next(err)
