@@ -39,7 +39,6 @@ export const authSignUp = (
 ) => async dispatch => {
   let res
   try {
-    // console.log(method)
     res = await axios.post(`/auth/${method}`, {
       firstName,
       lastName,
@@ -58,19 +57,10 @@ export const authSignUp = (
   }
 }
 
-export const authLogin = (
-  firstName,
-  lastName,
-  email,
-  password,
-  method
-) => async dispatch => {
+export const authLogin = (email, password, method) => async dispatch => {
   let res
   try {
-    // console.log(method)
     res = await axios.post(`/auth/${method}`, {
-      firstName,
-      lastName,
       email,
       password
     })
