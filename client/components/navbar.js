@@ -6,12 +6,7 @@ import {logout} from '../store'
 
 const AddProductButton = ({isAdmin}) => {
   if (isAdmin === 'true') {
-    return (
-      <div>
-        <Link to="/create-product">Add New Product</Link>
-        <Link to="/all-users">All Users</Link>
-      </div>
-    )
+    return <Link to="/create-product">Add New Product</Link>
   } else {
     return ''
   }
@@ -30,6 +25,7 @@ const Navbar = ({handleClick, isLoggedIn, isAdmin}) => (
           <a href="#" onClick={handleClick}>
             Logout
           </a>
+          <AddProductButton isAdmin={isAdmin} />
         </div>
       ) : (
         <div>
