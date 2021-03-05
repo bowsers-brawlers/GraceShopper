@@ -6,7 +6,12 @@ import {logout} from '../store'
 
 const AddProductButton = ({isAdmin}) => {
   if (isAdmin === 'true') {
-    return <Link to="/create-product">Add New Product</Link>
+    return (
+      <div>
+        <Link to="/create-product">Add New Product</Link>
+        <Link to="/all-users">All Users</Link>
+      </div>
+    )
   } else {
     return ''
   }
