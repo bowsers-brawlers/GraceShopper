@@ -41,7 +41,11 @@ form div {
   }
 }
 
-.all-products .product-container {
+.all-products .product-container:hover .product {
+  transform: scale(1.1);
+}
+.all-products .product-container:hover {
+  background-image: linear-gradient(white, whitesmoke);
 }
 .all-products .product-container .product {
   max-width: 500px;
