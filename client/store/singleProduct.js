@@ -26,7 +26,10 @@ export const _editProduct = product => ({
 })
 export const editProduct = product => async dispatch => {
   try {
+    console.log('PRODUCT::: ', product)
     const {data: product} = await axios.put(`/api/products/`)
+    dispatch(_editProduct())
+    history.push(`/products/${product.id}`)
   } catch (e) {
     next(e)
   }

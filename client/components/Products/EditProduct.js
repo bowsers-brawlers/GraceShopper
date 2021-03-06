@@ -1,6 +1,10 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {editProduct, fetchSingleProduct} from '../../store/singleProduct'
+import {
+  editProduct,
+  fetchSingleProduct,
+  deleteProduct
+} from '../../store/singleProduct'
 
 export class EditProduct extends Component {
   constructor(props) {
@@ -47,7 +51,8 @@ export class EditProduct extends Component {
 
   handleSubmit(evt) {
     evt.preventDefault()
-    const product = {}
+    // const product = {}
+    console.log('STATE::', {...this.state})
     this.props.updateProduct({...this.state})
   }
 
@@ -59,13 +64,12 @@ export class EditProduct extends Component {
 
   handleDeleteProduct(evt) {
     const id = this.props.product.id
-    console.log(id)
     this.props.deleteProduct(id)
   }
 
   render() {
     const {name, description, quantity, price, imageUrl} = this.state
-    const {handleSubmit, handleChange} = this
+    const {handleSubmit, handleChange, handleDeleteProduct} = this
     if (this.props.user.isAdmin === 'true') {
       return (
         <section>
@@ -125,10 +129,9 @@ export class EditProduct extends Component {
               <button type="submit">Edit Product</button>
             </div>
           </form>
+          <br />
           <div className="btn-delete">
-            <button onClick={handleDeleteProduct}>
-              Delete:<small>notHooked</small>
-            </button>
+            <button onClick={handleDeleteProduct}>Delete</button>
           </div>
         </section>
       )
