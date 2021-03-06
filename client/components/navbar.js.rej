@@ -1,0 +1,10 @@
+diff a/client/components/navbar.js b/client/components/navbar.js	(rejected hunks)
+@@ -8,3 +8,5 @@ const AddProductButton = ({isAdmin}) => {
+-
+-  if(isAdmin === 'true') { return(<Link to="/create-product">Add New Product</Link>) }
+-  else{ return ""}
++  if (isAdmin === 'true') {
++    return <Link to="/create-product">Add New Product</Link>
++  } else {
++    return ''
++  }
