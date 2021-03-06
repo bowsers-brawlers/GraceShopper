@@ -2,18 +2,6 @@ import React from 'react'
 import {fetchCart, completeOrder, updateCart} from '../store/cart'
 import {connect} from 'react-redux'
 
-// to add X icon to delete item from cart
-// to use a form to let user change quantity in cart -> send to back end on order submission
-
-/* On Order submit
-Put request to edit Product model with decremented quantity
-    on front end all products and/or single product -> if quantity is 0, indicate to user
-
-Put route to Order model to change isComplete from 'false' to 'true'
- => essentially add to user's history => Post request to add to users history
-
-
-*/
 class Cart extends React.Component {
   constructor(props) {
     super(props)
@@ -31,7 +19,6 @@ class Cart extends React.Component {
   }
   componentWillUnmount() {
     if (this.state.order.length !== 0) {
-      console.log('updating cart')
       this.props.updateCart(this.state)
     }
   }

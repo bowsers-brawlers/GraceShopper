@@ -45,8 +45,6 @@ export const addToCart = product => {
   }
 }
 export const completeOrder = cartDetails => {
-  // pull out userId and orderId from order
-  console.log('cartDetails ----------', cartDetails)
   const userId = cartDetails.user.id
   const orderId = cartDetails.order[0].orderId
 

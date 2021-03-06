@@ -42,10 +42,6 @@ router.post('/:userId/orders', async (req, res, next) => {
       await order.addProduct(product, {
         through: {quantity: req.body.quantity, price: product.price}
       })
-
-      //await order.addProducts(product)
-      //const newOrder = await order.addProduct(product)
-      //console.log(newOrder, 'BODY')
       const customer = await User.findByPk(req.params.userId)
       await customer.addOrder(order)
     } else {
@@ -106,19 +102,13 @@ router.put('/:userId/orders/:orderId/update', async (req, res, next) => {
     }
     res.sendStatus(201)
   } catch (error) {
-    console.log(error)
+    next(error)
   }
 })
 
 // PLACE ORDER
 router.put('/:userId/orders/:orderId', async (req, res, next) => {
   try {
-    // update inventory quantity on order submission -------------------
-    // receive an array of objects of all products in order
-    // object should contain
-    // productId
-    // quantity
-    console.log('req.body', req.body)
     const {order} = req.body
     for (let i = 0; i < order.length; i++) {
       const product = await Products.findByPk(order[i].product.id)
