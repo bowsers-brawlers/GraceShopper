@@ -7,22 +7,6 @@ module.exports = router
 
 router.get('/', async (req, res, next) => {
   try {
-    // const {requestorId} = req.params
-    // console.log(requestorId)
-    // const requestor = await User.findByPk(requestorId)
-    // console.log(requestor)
-    // if (requestor.isAdmin === 'true') {
-    //   const users = await User.findAll({
-    //     // explicitly select only the id and email fields - even though
-    //     // users' passwords are encrypted, it won't help if we just
-    //     // send everything to anyone who asks!
-    //     attributes: ['id', 'email'],
-    //   })
-    //   res.status(200).json(users)
-    // } else {
-    //   res.sendStatus(405)
-    // }
-
     const users = await User.findAll({
       attributes: ['id', 'email', 'firstName', 'lastName']
     })
@@ -105,6 +89,28 @@ router.get('/:userId/orders', async (req, res, next) => {
   }
 })
 
+// update cart
+router.put('/:userId/orders/:orderId/update', async (req, res, next) => {
+  try {
+    const {order} = req.body
+    const {orderId} = req.params
+    let product
+    for (let i = 0; i < order.length; i++) {
+      product = await orderDetails.findOne({
+        where: {
+          orderId: orderId,
+          productId: order[i].productId
+        }
+      })
+      await product.update({quantity: order[i].quantity})
+    }
+    res.sendStatus(201)
+  } catch (error) {
+    console.log(error)
+  }
+})
+
+// PLACE ORDER
 router.put('/:userId/orders/:orderId', async (req, res, next) => {
   try {
     // update inventory quantity on order submission -------------------
@@ -117,6 +123,13 @@ router.put('/:userId/orders/:orderId', async (req, res, next) => {
     for (let i = 0; i < order.length; i++) {
       const product = await Products.findByPk(order[i].product.id)
       await product.update({quantity: product.quantity - order[i].quantity})
+      const orderDetailsInstance = await orderDetails.findOne({
+        where: {
+          orderId: order[i].orderId,
+          productId: order[i].product.id
+        }
+      })
+      await orderDetailsInstance.update({quantity: order[i].quantity})
     }
     // update isComplete to 'true' ---------------------------------------
     const {orderId} = req.params

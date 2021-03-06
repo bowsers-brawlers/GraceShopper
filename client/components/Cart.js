@@ -1,5 +1,5 @@
 import React from 'react'
-import {fetchCart, completeOrder} from '../store/cart'
+import {fetchCart, completeOrder, updateCart} from '../store/cart'
 import {connect} from 'react-redux'
 
 // to add X icon to delete item from cart
@@ -23,16 +23,20 @@ class Cart extends React.Component {
   }
   async componentDidMount() {
     await this.props.fetchCart(this.props.loggedInUserId)
-    console.log('cart --------------------', this.props.cart)
     this.setState(state => ({
       ...state,
       user: this.props.user,
       order: this.props.cart
     }))
   }
+  componentWillUnmount() {
+    if (this.state.order.length !== 0) {
+      console.log('updating cart')
+      this.props.updateCart(this.state)
+    }
+  }
   async handleSubmit(evt) {
     evt.preventDefault()
-    console.log('this.state from Cart.js ------------------', this.state)
     await this.props.completeOrder(this.state)
     this.setState(state => ({
       ...state,
@@ -41,7 +45,6 @@ class Cart extends React.Component {
   }
   handleChange(evt, productId) {
     evt.persist()
-    console.log('evt------------------------------', evt)
     this.setState(state => ({
       ...state,
       order: state.order.map(item => {
@@ -95,7 +98,8 @@ const mapState = state => {
 const mapDispatch = dispatch => {
   return {
     fetchCart: userId => dispatch(fetchCart(userId)),
-    completeOrder: order => dispatch(completeOrder(order))
+    completeOrder: cartdetails => dispatch(completeOrder(cartdetails)),
+    updateCart: cartdetails => dispatch(updateCart(cartdetails))
   }
 }
 export default connect(mapState, mapDispatch)(Cart)

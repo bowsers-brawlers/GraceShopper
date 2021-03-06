@@ -1,22 +1,22 @@
 import axios from 'axios'
 
 // action type
-const POPULATE_CART = 'POPULATE_CART'
+const SET_CART = 'SET_CART'
 const COMPLETE_ORDER = 'COMPLETE_ORDER'
 
 // action creator
 const _addToCart = productsInOrder => {
   return {
-    type: POPULATE_CART,
+    type: SET_CART,
     productsInOrder
   }
 }
 const _completeOrder = () => {
-  console.log('complete order action creator')
   return {
     type: COMPLETE_ORDER
   }
 }
+
 // thunk
 // *********** object passed into thunk needs: userId, productId, quantity ***********
 export const fetchCart = userId => {
@@ -60,6 +60,23 @@ export const completeOrder = cartDetails => {
   }
 }
 
+export const updateCart = cartDetails => {
+  const userId = cartDetails.user.id
+  const orderId = cartDetails.order[0].orderId
+
+  return async dispatch => {
+    try {
+      await axios.put(
+        `/api/users/${userId}/orders/${orderId}/update`,
+        cartDetails
+      )
+      dispatch(fetchCart(userId))
+    } catch (error) {
+      console.log(error)
+    }
+  }
+}
+
 // reducer
 const initialState = {
   cart: []
@@ -67,7 +84,7 @@ const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case POPULATE_CART:
+    case SET_CART:
       return {...state, cart: action.productsInOrder}
     case COMPLETE_ORDER:
       return {...state, cart: []}
