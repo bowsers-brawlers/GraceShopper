@@ -1,7 +1,7 @@
 import axios from 'axios'
-import {getAllProducts} from './products'
 
 const GET_SINGLE_PRODUCT = 'GET_SINGLE_PRODUCT'
+const EDIT_PRODUCT = 'EDIT_PRODUCT'
 
 export const getSingleProduct = product => ({
   type: GET_SINGLE_PRODUCT,
@@ -15,6 +15,20 @@ export const fetchSingleProduct = id => async dispatch => {
     dispatch(getSingleProduct(product))
   } catch (err) {
     console.log(err)
+  }
+}
+
+/** EDIT PRODUCT */
+export const _editProduct = product => ({
+  type: EDIT_PRODUCT,
+  product
+})
+export const editProduct = product => async dispatch => {
+  try {
+    console.log(product)
+    const {data: product} = await axios.put(`/api/products/`)
+  } catch (e) {
+    next(e)
   }
 }
 

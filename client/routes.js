@@ -12,6 +12,7 @@ import SingleProduct from './components/SingleProduct'
 import {fetchAllProducts} from './store/products'
 import {me} from './store'
 import CreateProduct from './components/Products/CreateProduct'
+import EditProduct from './components/Products/EditProduct'
 import {fetchSingleUser} from './store/singleUser'
 
 /**
@@ -38,6 +39,7 @@ class Routes extends Component {
           component={SingleProduct}
           // render={(routeProps) => <SingleProduct {...routeProps} />}
         />
+
         {isLoggedIn && (
           <Switch>
             {/* Routes placed here are only available after logging in */}
@@ -58,6 +60,15 @@ class Routes extends Component {
               render={routeProps => (
                 <CreateProduct {...routeProps} isAdmin={isAdmin} />
               )}
+            />
+            {/** EDIT PRODUCT **/}
+            <Route
+              exact
+              path="/products/:productId/edit"
+              component={EditProduct}
+              // render={routerProps => (
+              //   <EditProduct {...routerProps} />
+              // )}
             />
           </Switch>
         )}

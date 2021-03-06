@@ -22,8 +22,17 @@ router.get('/:productId', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
   try {
-    console.log(':::::: REQ BODY ! :::::::::: ', req)
     res.status(201).send(await Products.create(req.body))
+  } catch (e) {
+    next(e)
+  }
+})
+
+router.put('/', async (req, res, next) => {
+  try {
+    console.log(req.body)
+    const product = await Products.findByPk(req.body.productId)
+    res.send(await product.update(req.body))
   } catch (e) {
     next(e)
   }
