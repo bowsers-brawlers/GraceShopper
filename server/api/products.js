@@ -30,8 +30,7 @@ router.post('/', async (req, res, next) => {
 
 router.put('/', async (req, res, next) => {
   try {
-    console.log(req.body)
-    const product = await Products.findByPk(req.body.productId)
+    const product = await Products.findByPk(req.body.id)
     res.send(await product.update(req.body))
   } catch (e) {
     next(e)

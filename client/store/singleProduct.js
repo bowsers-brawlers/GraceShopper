@@ -24,14 +24,14 @@ export const _editProduct = product => ({
   type: EDIT_PRODUCT,
   product
 })
-export const editProduct = product => async dispatch => {
+export const editProduct = (singleProduct, history) => async dispatch => {
   try {
-    console.log('PRODUCT::: ', product)
-    const {data: product} = await axios.put(`/api/products/`)
-    dispatch(_editProduct())
-    history.push(`/products/${product.id}`)
+    const {data: product} = await axios.put(`/api/products/`, singleProduct)
+
+    dispatch(_editProduct(product))
+    history.push(`/products/${singleProduct.id}`)
   } catch (e) {
-    next(e)
+    console.log(e)
   }
 }
 
@@ -41,11 +41,13 @@ export const _deleteProduct = product => ({
   product
 })
 
-export const deleteProduct = (product, history) => {
+export const deleteProduct = (id, history) => {
+  console.log(id)
   return async dispatch => {
-    const removeProduct = await axios.delete(`/api/products/${product.id}`)
+    const removeProduct = await axios.delete(`/api/products/${id}`)
+    console.log(removeProduct)
     dispatch(_deleteProduct(removeProduct))
-    history.push('/')
+    history.push('/home')
   }
 }
 
@@ -54,6 +56,10 @@ const initialState = []
 export default function singleProductReducer(state = initialState, action) {
   switch (action.type) {
     case GET_SINGLE_PRODUCT:
+      return action.product
+    case EDIT_PRODUCT:
+      return action.product
+    case DELETE_PRODUCT:
       return action.product
     default:
       return state

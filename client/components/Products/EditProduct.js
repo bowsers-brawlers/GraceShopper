@@ -51,9 +51,8 @@ export class EditProduct extends Component {
 
   handleSubmit(evt) {
     evt.preventDefault()
-    // const product = {}
-    console.log('STATE::', {...this.state})
-    this.props.updateProduct({...this.state})
+    const product = this.state
+    this.props.updateProduct(product)
   }
 
   handleChange(evt) {
@@ -149,7 +148,7 @@ const mapState = state => ({
 const mapDispatch = (dispatch, {history}) => ({
   updateProduct: product => dispatch(editProduct(product, history)),
   getSingleProduct: id => dispatch(fetchSingleProduct(id)),
-  deleteProduct: id => dispatch(deleteProduct(product, history))
+  deleteProduct: id => dispatch(deleteProduct(id, history))
 })
 
 export default connect(mapState, mapDispatch)(EditProduct)
