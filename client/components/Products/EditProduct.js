@@ -13,32 +13,35 @@ export class EditProduct extends Component {
       quantity: '',
       imageUrl: ''
     }
+
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
   }
   componentDidMount() {
-    // console.log(this.props.match.params.productId)
-    // if (this.props.match.params.productId) {
-    //   this.setState({
-    //     id: this.props.product.id,
-    //     description: this.props.product.description,
-    //     price: this.props.product.price,
-    //     quantity: this.props.product.quantity,
-    //     imageUrl: this.props.product.imageUrl
-    //   })
-    // }
+    const id = this.props.match.params.productId
+    this.props.getSingleProduct(id)
+    if (id) {
+      this.setState({
+        id: this.props.product.id || '',
+        name: this.props.product.name || '',
+        description: this.props.product.description || '',
+        price: this.props.product.price || '',
+        quantity: this.props.product.quantity || '',
+        imageUrl: this.props.product.imageUrl || ''
+      })
+    }
   }
   componentDidUpdate(prevProps) {
-    // console.log(this.props)
-    // if (!prevProps.product.id && this.props.product.id) {
-    //   this.setState({
-    //     id: this.props.product.id,
-    //     description: this.props.product.description,
-    //     price: this.props.product.price,
-    //     quantity: this.props.product.quantity,
-    //     imageUrl: this.props.product.imageUrl
-    //   })
-    // }
+    if (!prevProps.product.id && this.props.product.id) {
+      this.setState({
+        id: this.props.product.id,
+        name: this.props.product.name,
+        description: this.props.product.description,
+        price: this.props.product.price,
+        quantity: this.props.product.quantity,
+        imageUrl: this.props.product.imageUrl
+      })
+    }
   }
 
   handleSubmit(evt) {
@@ -56,7 +59,6 @@ export class EditProduct extends Component {
   render() {
     const {name, description, quantity, price, imageUrl} = this.state
     const {handleSubmit, handleChange} = this
-    console.log(this.props)
     if (this.props.user.isAdmin === 'true') {
       return (
         <section>
@@ -113,10 +115,10 @@ export class EditProduct extends Component {
               />
             </div>
             <div className="buttons">
-              <button type="submit">Add Product</button>
+              <button type="submit">Edit Product</button>
             </div>
           </form>
-          <div>
+          <div className="btn-delete">
             <button>
               Delete:<small>notHooked</small>
             </button>
@@ -129,13 +131,14 @@ export class EditProduct extends Component {
   }
 }
 
+const mapState = state => ({
+  user: state.user,
+  product: state.singleProductReducer
+})
+
 const mapDispatch = (dispatch, {history}) => ({
   updateProduct: product => dispatch(editProduct(product, history)),
   getSingleProduct: id => dispatch(fetchSingleProduct(id))
-})
-const mapState = state => ({
-  user: state.user,
-  singleProduct: state.singleProductReducer
 })
 
 export default connect(mapState, mapDispatch)(EditProduct)
