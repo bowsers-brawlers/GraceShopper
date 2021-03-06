@@ -34,6 +34,15 @@ class Routes extends Component {
           path="/home"
           render={() => <AllProducts products={this.props.products} />}
         />
+        {/** EDIT PRODUCT **/}
+        <Route
+          exact
+          path="/products/:productId/edit"
+          component={EditProduct}
+          // render={routerProps => (
+          //   <EditProduct {...routerProps}/>
+          // )}
+        />
         <Route
           path="/products/:productId"
           component={SingleProduct}
@@ -60,15 +69,6 @@ class Routes extends Component {
               render={routeProps => (
                 <CreateProduct {...routeProps} isAdmin={isAdmin} />
               )}
-            />
-            {/** EDIT PRODUCT **/}
-            <Route
-              exact
-              path="/products/:productId/edit"
-              component={EditProduct}
-              // render={routerProps => (
-              //   <EditProduct {...routerProps} />
-              // )}
             />
           </Switch>
         )}
