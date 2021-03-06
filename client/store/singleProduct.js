@@ -2,6 +2,7 @@ import axios from 'axios'
 
 const GET_SINGLE_PRODUCT = 'GET_SINGLE_PRODUCT'
 const EDIT_PRODUCT = 'EDIT_PRODUCT'
+const DELETE_PRODUCT = 'DELETE_PRODUCT'
 
 export const getSingleProduct = product => ({
   type: GET_SINGLE_PRODUCT,
@@ -25,10 +26,23 @@ export const _editProduct = product => ({
 })
 export const editProduct = product => async dispatch => {
   try {
-    console.log(product)
     const {data: product} = await axios.put(`/api/products/`)
   } catch (e) {
     next(e)
+  }
+}
+
+/** DELETE PRODUCT */
+export const _deleteProduct = product => ({
+  type: DELETE_PRODUCT,
+  product
+})
+
+export const deleteProduct = (product, history) => {
+  return async dispatch => {
+    const removeProduct = await axios.delete(`/api/products/${product.id}`)
+    dispatch(_deleteProduct(removeProduct))
+    history.push('/')
   }
 }
 

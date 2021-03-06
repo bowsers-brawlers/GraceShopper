@@ -16,6 +16,7 @@ export class EditProduct extends Component {
 
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
+    this.handleDeleteProduct = this.handleDeleteProduct.bind(this)
   }
   componentDidMount() {
     const id = this.props.match.params.productId
@@ -54,6 +55,12 @@ export class EditProduct extends Component {
     this.setState({
       [evt.target.name]: evt.target.value
     })
+  }
+
+  handleDeleteProduct(evt) {
+    const id = this.props.product.id
+    console.log(id)
+    this.props.deleteProduct(id)
   }
 
   render() {
@@ -119,7 +126,7 @@ export class EditProduct extends Component {
             </div>
           </form>
           <div className="btn-delete">
-            <button>
+            <button onClick={handleDeleteProduct}>
               Delete:<small>notHooked</small>
             </button>
           </div>
@@ -138,7 +145,8 @@ const mapState = state => ({
 
 const mapDispatch = (dispatch, {history}) => ({
   updateProduct: product => dispatch(editProduct(product, history)),
-  getSingleProduct: id => dispatch(fetchSingleProduct(id))
+  getSingleProduct: id => dispatch(fetchSingleProduct(id)),
+  deleteProduct: id => dispatch(deleteProduct(product, history))
 })
 
 export default connect(mapState, mapDispatch)(EditProduct)
