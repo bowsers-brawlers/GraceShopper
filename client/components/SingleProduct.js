@@ -44,7 +44,7 @@ export class SingleProduct extends Component {
           <h3> {product.price / 100}</h3>
           <h3>{product.quantity}</h3>
           <img src={product.imageUrl} />
-          <form id="form" onSubmit={this.handleSubmit}>
+          <form id="single-product-form" onSubmit={this.handleSubmit}>
             <label htmlFor="quantity">Quantity</label>
             <input
               name="quantity"

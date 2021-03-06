@@ -87,15 +87,19 @@ router.get('/:userId/orders', async (req, res, next) => {
       }
     })
     // include Product model
-    const productsInOrder = await orderDetails.findAll({
-      where: {
-        orderId: order.id
-      },
-      include: {
-        model: Products
-      }
-    })
-    res.status(200).send(productsInOrder)
+    if (order) {
+      const productsInOrder = await orderDetails.findAll({
+        where: {
+          orderId: order.id
+        },
+        include: {
+          model: Products
+        }
+      })
+      res.status(200).send(productsInOrder)
+    } else {
+      res.sendStatus(204)
+    }
   } catch (error) {
     next(error)
   }
@@ -111,16 +115,12 @@ router.put('/:userId/orders/:orderId', async (req, res, next) => {
     console.log('req.body', req.body)
     const {order} = req.body
     for (let i = 0; i < order.length; i++) {
-      const product = await Products.findByPk(order[i].productId)
+      const product = await Products.findByPk(order[i].product.id)
       await product.update({quantity: product.quantity - order[i].quantity})
     }
     // update isComplete to 'true' ---------------------------------------
     const {orderId} = req.params
-    const completeOrder = await orderDetails.findAll({
-      where: {
-        orderId: orderId
-      }
-    })
+    const completeOrder = await Order.findByPk(orderId)
     await completeOrder.update({isComplete: 'true'})
     res.sendStatus(200)
   } catch (error) {

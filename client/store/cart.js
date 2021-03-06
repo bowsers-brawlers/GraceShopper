@@ -2,12 +2,19 @@ import axios from 'axios'
 
 // action type
 const POPULATE_CART = 'POPULATE_CART'
+const COMPLETE_ORDER = 'COMPLETE_ORDER'
 
 // action creator
 const _addToCart = productsInOrder => {
   return {
     type: POPULATE_CART,
     productsInOrder
+  }
+}
+const _completeOrder = () => {
+  console.log('complete order action creator')
+  return {
+    type: COMPLETE_ORDER
   }
 }
 // thunk
@@ -37,6 +44,21 @@ export const addToCart = product => {
     }
   }
 }
+export const completeOrder = cartDetails => {
+  // pull out userId and orderId from order
+  console.log('cartDetails ----------', cartDetails)
+  const userId = cartDetails.user.id
+  const orderId = cartDetails.order[0].orderId
+
+  return async dispatch => {
+    try {
+      await axios.put(`/api/users/${userId}/orders/${orderId}`, cartDetails)
+      dispatch(_completeOrder())
+    } catch (error) {
+      console.log(error)
+    }
+  }
+}
 
 // reducer
 const initialState = {
@@ -47,6 +69,8 @@ export default (state = initialState, action) => {
   switch (action.type) {
     case POPULATE_CART:
       return {...state, cart: action.productsInOrder}
+    case COMPLETE_ORDER:
+      return {...state, cart: []}
     default:
       return state
   }
