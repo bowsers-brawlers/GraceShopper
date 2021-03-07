@@ -17,7 +17,7 @@ async function seed() {
       name: 'Borrasca Rose Cava',
       description:
         "Spain - You don't need a celebration to enjoy this sparkly Spanish Rose goodness with notes of candied strawberries, ripe raspberries, and fragrant pink roses. If you love bubbles like we do, this will be a welcome addition to the table alongside your favorite Prosecco!",
-      price: 12,
+      price: 1200,
       quantity: 4,
       imageUrl:
         'https://www.totalwine.com/dynamic/x220,sq/media/sys_master/twmmedia/he2/h56/13411304570910.png'
@@ -27,7 +27,7 @@ async function seed() {
       name: 'Ed Edmundo Cabernet Sauvignon, 2019',
       description:
         'James Suckling-Mendoza, Argentina - ""Sweet black fruit, black olives and a leafy accent. Ripe, fleshy dark fruit with soft tannin, leading to a spicy finish. Drink now."" What a fantastic Cabernet for the pricepoint, this wine overdelivers in every way!',
-      price: 11,
+      price: 1100,
       quantity: 40,
       imageUrl:
         'https://www.totalwine.com/dynamic/x220,sq/media/sys_master/twmmedia/h44/h86/13290194403358.png'
@@ -45,7 +45,7 @@ async function seed() {
     Products.create({
       name: 'Sad Wine',
       description: 'Wine for when you are sad',
-      price: 11,
+      price: 1199,
       quantity: 4,
       imageUrl: defaultProductImg
     }),
@@ -53,42 +53,42 @@ async function seed() {
     Products.create({
       name: 'Relxaing Wine',
       description: 'Wine for when you are relaxing',
-      price: 31,
+      price: 3199,
       quantity: 4,
       imageUrl: defaultProductImg
     }),
     Products.create({
       name: 'Celabratory Wine',
       description: 'Wine for celabrating',
-      price: 211,
+      price: 21199,
       quantity: 4,
       imageUrl: defaultProductImg
     }),
     Products.create({
       name: 'Wine',
       description: 'Plain Wine',
-      price: 21,
+      price: 2199,
       quantity: 4,
       imageUrl: defaultProductImg
     }),
     Products.create({
       name: 'Green Wine',
       description: 'Wine that is green',
-      price: 21,
+      price: 2199,
       quantity: 4,
       imageUrl: defaultProductImg
     }),
     Products.create({
       name: 'Blue Wine',
       description: 'Wine that is blue',
-      price: 21,
+      price: 2199,
       quantity: 4,
       imageUrl: defaultProductImg
     }),
     Products.create({
       name: 'Purple Wine',
       description: 'Wine that is purple',
-      price: 21,
+      price: 2199,
       quantity: 4,
       imageUrl: defaultProductImg
     })

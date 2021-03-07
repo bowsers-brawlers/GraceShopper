@@ -30,9 +30,18 @@ router.post('/', async (req, res, next) => {
 
 router.put('/', async (req, res, next) => {
   try {
-    console.log(req.body)
-    const product = await Products.findByPk(req.body.productId)
+    const product = await Products.findByPk(req.body.id)
     res.send(await product.update(req.body))
+  } catch (e) {
+    next(e)
+  }
+})
+
+router.delete('/:productId', async (req, res, next) => {
+  try {
+    const id = req.params.productId
+    await Products.destroy({where: {id}})
+    res.status(204).end()
   } catch (e) {
     next(e)
   }

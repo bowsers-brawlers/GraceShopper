@@ -8,6 +8,7 @@ import AllUsers from './components/AllUsers'
 import SingleUser from './components/SingleUser'
 import AllProducts from './components/Products'
 import SingleProduct from './components/SingleProduct'
+import Cart from './components/Cart'
 
 import {fetchAllProducts} from './store/products'
 import {me} from './store'
@@ -25,6 +26,7 @@ class Routes extends Component {
 
   render() {
     const {isLoggedIn, loggedInUserId, isAdmin} = this.props
+
     return (
       <Switch>
         {/* Routes placed here are available to all visitors */}
@@ -34,16 +36,25 @@ class Routes extends Component {
           path="/home"
           render={() => <AllProducts products={this.props.products} />}
         />
+        {/** EDIT PRODUCT **/}
+        <Route exact path="/products/:productId/edit" component={EditProduct} />
         <Route
           path="/products/:productId"
-          component={SingleProduct}
-          // render={(routeProps) => <SingleProduct {...routeProps} />}
+          render={routeProps => (
+            <SingleProduct {...routeProps} isAdmin={isAdmin} />
+          )}
         />
 
         {isLoggedIn && (
           <Switch>
             {/* Routes placed here are only available after logging in */}
             <Route path="/home" component={UserHome} />
+            <Route
+              path="/cart"
+              render={routeProps => (
+                <Cart {...routeProps} loggedInUserId={loggedInUserId} />
+              )}
+            />
             <Route
               path="/all-users/:userId"
               component={SingleUser}
@@ -60,15 +71,6 @@ class Routes extends Component {
               render={routeProps => (
                 <CreateProduct {...routeProps} isAdmin={isAdmin} />
               )}
-            />
-            {/** EDIT PRODUCT **/}
-            <Route
-              exact
-              path="/products/:productId/edit"
-              component={EditProduct}
-              // render={routerProps => (
-              //   <EditProduct {...routerProps} />
-              // )}
             />
           </Switch>
         )}
@@ -112,6 +114,6 @@ export default withRouter(connect(mapState, mapDispatch)(Routes))
 Routes.propTypes = {
   loadInitialData: PropTypes.func.isRequired,
   isLoggedIn: PropTypes.bool.isRequired,
-  // isAdmin: PropTypes.bool,
+  isAdmin: PropTypes.string,
   products: PropTypes.array
 }

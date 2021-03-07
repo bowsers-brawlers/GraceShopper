@@ -6,6 +6,7 @@ import {Link} from 'react-router-dom'
 export function AllProducts({products}) {
   if (products.length) {
     return products.map(product => (
+
       <section key={product.id} className="product-container">
         <Link to={`/products/${product.id}`}>
           <div className="product">
@@ -13,9 +14,10 @@ export function AllProducts({products}) {
               <img src={product.imageUrl} alt={product.name} width="200px" />
             </figure>
             <div className="title">{product.name}</div>
-            <div className="product-price">${product.price}</div>
+            <div className="product-price">${product.price / 100}</div>
           </div>
         </Link>
+
       </section>
     ))
   } else {
