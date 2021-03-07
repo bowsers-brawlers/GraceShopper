@@ -25,6 +25,7 @@ class Routes extends Component {
 
   render() {
     const {isLoggedIn, loggedInUserId, isAdmin} = this.props
+
     return (
       <Switch>
         {/* Routes placed here are available to all visitors */}
@@ -35,18 +36,12 @@ class Routes extends Component {
           render={() => <AllProducts products={this.props.products} />}
         />
         {/** EDIT PRODUCT **/}
-        <Route
-          exact
-          path="/products/:productId/edit"
-          component={EditProduct}
-          // render={routerProps => (
-          //   <EditProduct {...routerProps}/>
-          // )}
-        />
+        <Route exact path="/products/:productId/edit" component={EditProduct} />
         <Route
           path="/products/:productId"
-          component={SingleProduct}
-          // render={(routeProps) => <SingleProduct {...routeProps} />}
+          render={routeProps => (
+            <SingleProduct {...routeProps} isAdmin={isAdmin} />
+          )}
         />
 
         {isLoggedIn && (
@@ -112,6 +107,6 @@ export default withRouter(connect(mapState, mapDispatch)(Routes))
 Routes.propTypes = {
   loadInitialData: PropTypes.func.isRequired,
   isLoggedIn: PropTypes.bool.isRequired,
-  // isAdmin: PropTypes.bool,
+  isAdmin: PropTypes.string,
   products: PropTypes.array
 }

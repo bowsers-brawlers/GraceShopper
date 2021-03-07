@@ -1,4 +1,5 @@
 import axios from 'axios'
+import {fetchAllProducts} from './products'
 
 const GET_SINGLE_PRODUCT = 'GET_SINGLE_PRODUCT'
 const EDIT_PRODUCT = 'EDIT_PRODUCT'
@@ -12,7 +13,6 @@ export const getSingleProduct = product => ({
 export const fetchSingleProduct = id => async dispatch => {
   try {
     const {data: product} = await axios.get(`/api/products/${id}`)
-    console.log('PRODUCT', product)
     dispatch(getSingleProduct(product))
   } catch (err) {
     console.log(err)
@@ -42,11 +42,10 @@ export const _deleteProduct = product => ({
 })
 
 export const deleteProduct = (id, history) => {
-  console.log(id)
   return async dispatch => {
     const removeProduct = await axios.delete(`/api/products/${id}`)
-    console.log(removeProduct)
     dispatch(_deleteProduct(removeProduct))
+    dispatch(fetchAllProducts())
     history.push('/home')
   }
 }

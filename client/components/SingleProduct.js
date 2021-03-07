@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {fetchSingleProduct} from '../store/singleProduct'
+import {Link} from 'react-router-dom'
 
 export class SingleProduct extends Component {
   componentDidMount() {
@@ -9,10 +10,16 @@ export class SingleProduct extends Component {
   }
   render() {
     const product = this.props.singleProduct
-    console.log(this.props)
+
     if (product) {
       return (
         <section className="section product-view">
+          {this.props.isAdmin === 'true' ? (
+            <Link to={`/products/${product.id}/edit`}> Edit Product</Link>
+          ) : (
+            ''
+          )}
+
           <figure>
             <img src={product.imageUrl} />
           </figure>
@@ -35,8 +42,7 @@ export class SingleProduct extends Component {
 
 const mapState = state => {
   return {
-    singleProduct: state.singleProductReducer,
-    isAdmin: state.isAdmin
+    singleProduct: state.singleProductReducer
   }
 }
 
