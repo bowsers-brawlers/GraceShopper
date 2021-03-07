@@ -1,17 +1,29 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import PropTypes from 'prop-types'
-import {auth} from '../store'
+import {authSignup} from '../store'
 
 /**
  * COMPONENT
  */
-const AuthForm = props => {
+const AuthSignup = props => {
   const {name, displayName, handleSubmit, error} = props
 
   return (
     <div>
       <form onSubmit={handleSubmit} name={name}>
+        <div>
+          <label htmlFor="firstName">
+            <small>First Name</small>
+          </label>
+          <input name="firstName" type="text" />
+        </div>
+        <div>
+          <label htmlFor="lastName">
+            <small>Last Name</small>
+          </label>
+          <input name="lastName" type="text" />
+        </div>
         <div>
           <label htmlFor="email">
             <small>Email</small>
@@ -41,14 +53,6 @@ const AuthForm = props => {
  *   function, and share the same Component. This is a good example of how we
  *   can stay DRY with interfaces that are very similar to each other!
  */
-const mapLogin = state => {
-  return {
-    name: 'login',
-    displayName: 'Login',
-    error: state.user.error
-  }
-}
-
 const mapSignup = state => {
   return {
     name: 'signup',
@@ -62,20 +66,21 @@ const mapDispatch = dispatch => {
     handleSubmit(evt) {
       evt.preventDefault()
       const formName = evt.target.name
+      const firstName = evt.target.firstName.value
+      const lastName = evt.target.lastName.value
       const email = evt.target.email.value
       const password = evt.target.password.value
-      dispatch(auth(email, password, formName))
+      dispatch(authSignup(firstName, lastName, email, password, formName))
     }
   }
 }
 
-export const Login = connect(mapLogin, mapDispatch)(AuthForm)
-export const Signup = connect(mapSignup, mapDispatch)(AuthForm)
+export const Signup = connect(mapSignup, mapDispatch)(AuthSignup)
 
 /**
  * PROP TYPES
  */
-AuthForm.propTypes = {
+AuthSignup.propTypes = {
   name: PropTypes.string.isRequired,
   displayName: PropTypes.string.isRequired,
   handleSubmit: PropTypes.func.isRequired,
