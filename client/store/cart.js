@@ -4,6 +4,7 @@ import axios from 'axios'
 const SET_CART = 'SET_CART'
 const COMPLETE_ORDER = 'COMPLETE_ORDER'
 const REMOVE_FROM_CART = 'REMOVE_FROM_CART'
+const GET_ORDER_HISTORY = 'GET_ORDER_HISTORY'
 
 // action creator
 const _addToCart = productsInOrder => {
@@ -23,7 +24,23 @@ const _removeFromCart = productId => {
     productId
   }
 }
+const getOrderHistory = data => {
+  return {
+    type: GET_ORDER_HISTORY,
+    data
+  }
+}
 // thunk
+export const fetchOrderHistory = userId => {
+  return async dispatch => {
+    try {
+      const data = (await axios.get(`/api/users/${userId}/order-history`)).data
+      dispatch(getOrderHistory(data))
+    } catch (error) {
+      console.log(error)
+    }
+  }
+}
 // *********** object passed into thunk needs: userId, productId, quantity ***********
 export const fetchCart = userId => {
   return async dispatch => {
@@ -93,7 +110,8 @@ export const removeFromCart = cartDetails => {
 }
 // reducer
 const initialState = {
-  cart: []
+  cart: [],
+  orderHistory: []
 }
 
 export default (state = initialState, action) => {
@@ -107,6 +125,8 @@ export default (state = initialState, action) => {
         ...state,
         cart: state.cart.filter(item => item.productId !== action.productId)
       }
+    case GET_ORDER_HISTORY:
+      return {...state, orderHistory: action.data}
     default:
       return state
   }
