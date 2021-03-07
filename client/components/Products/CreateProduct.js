@@ -61,7 +61,7 @@ export class CreateProduct extends Component {
               name="price"
               onChange={handleChange}
               value={price}
-              placeholder="20"
+              placeholder="2000 = 20.00"
               required
             />
           </div>

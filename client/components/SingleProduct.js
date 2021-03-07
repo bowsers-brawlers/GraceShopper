@@ -3,9 +3,7 @@ import {connect} from 'react-redux'
 import {fetchSingleProduct} from '../store/singleProduct'
 
 import {addToCart} from '../store/cart'
-
 import {Link} from 'react-router-dom'
-
 
 export class SingleProduct extends Component {
   constructor(props) {
@@ -39,7 +37,7 @@ export class SingleProduct extends Component {
   }
   render() {
     const product = this.props.singleProduct
-
+    const {quantity} = this.state
     if (product) {
       return (
         <section className="section product-view">
@@ -58,7 +56,7 @@ export class SingleProduct extends Component {
             <div className="product-price"> {product.price / 100} </div>
             <div className="product-quantity">{product.quantity}</div>
           </div>
-           <form id="single-product-form" onSubmit={this.handleSubmit}>
+          <form id="single-product-form" onSubmit={this.handleSubmit}>
             <label htmlFor="quantity">Quantity</label>
             <input
               name="quantity"
@@ -73,7 +71,6 @@ export class SingleProduct extends Component {
             </button>
           </form>
         </section>
-
       )
     } else {
       return <div>Loading...</div>
