@@ -1,7 +1,11 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {fetchSingleProduct} from '../store/singleProduct'
+
 import {addToCart} from '../store/cart'
+
+import {Link} from 'react-router-dom'
+
 
 export class SingleProduct extends Component {
   constructor(props) {
@@ -35,16 +39,26 @@ export class SingleProduct extends Component {
   }
   render() {
     const product = this.props.singleProduct
-    const {quantity} = this.state
+
     if (product) {
       return (
-        <div>
-          <h1>{product.name}</h1>
-          <h3>{product.description}</h3>
-          <h3> {product.price / 100}</h3>
-          <h3>{product.quantity}</h3>
-          <img src={product.imageUrl} />
-          <form id="single-product-form" onSubmit={this.handleSubmit}>
+        <section className="section product-view">
+          {this.props.isAdmin === 'true' ? (
+            <Link to={`/products/${product.id}/edit`}> Edit Product</Link>
+          ) : (
+            ''
+          )}
+
+          <figure>
+            <img src={product.imageUrl} />
+          </figure>
+          <div className="product-info">
+            <div className="product-name">{product.name}</div>
+            <div className="product-description">{product.description}</div>
+            <div className="product-price"> {product.price / 100} </div>
+            <div className="product-quantity">{product.quantity}</div>
+          </div>
+           <form id="single-product-form" onSubmit={this.handleSubmit}>
             <label htmlFor="quantity">Quantity</label>
             <input
               name="quantity"
@@ -58,13 +72,15 @@ export class SingleProduct extends Component {
               Add to cart!
             </button>
           </form>
-        </div>
+        </section>
+
       )
     } else {
       return <div>Loading...</div>
     }
   }
 }
+
 const mapState = state => {
   return {
     singleProduct: state.singleProductReducer,
