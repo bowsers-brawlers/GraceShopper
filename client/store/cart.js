@@ -3,6 +3,7 @@ import axios from 'axios'
 // action type
 const SET_CART = 'SET_CART'
 const COMPLETE_ORDER = 'COMPLETE_ORDER'
+const REMOVE_FROM_CART = 'REMOVE_FROM_CART'
 
 // action creator
 const _addToCart = productsInOrder => {
@@ -16,7 +17,12 @@ const _completeOrder = () => {
     type: COMPLETE_ORDER
   }
 }
-
+const _removeFromCart = productId => {
+  return {
+    type: REMOVE_FROM_CART,
+    productId
+  }
+}
 // thunk
 // *********** object passed into thunk needs: userId, productId, quantity ***********
 export const fetchCart = userId => {
@@ -57,11 +63,9 @@ export const completeOrder = cartDetails => {
     }
   }
 }
-
 export const updateCart = cartDetails => {
   const userId = cartDetails.user.id
   const orderId = cartDetails.order[0].orderId
-
   return async dispatch => {
     try {
       await axios.put(
@@ -74,7 +78,19 @@ export const updateCart = cartDetails => {
     }
   }
 }
-
+export const removeFromCart = cartDetails => {
+  const {userId, orderId, productId} = cartDetails
+  return async dispatch => {
+    try {
+      await axios.delete(
+        `/api/users/${userId}/order/${orderId}/products/${productId}`
+      )
+      dispatch(_removeFromCart(productId))
+    } catch (error) {
+      console.log(error)
+    }
+  }
+}
 // reducer
 const initialState = {
   cart: []
@@ -86,6 +102,11 @@ export default (state = initialState, action) => {
       return {...state, cart: action.productsInOrder}
     case COMPLETE_ORDER:
       return {...state, cart: []}
+    case REMOVE_FROM_CART:
+      return {
+        ...state,
+        cart: state.cart.filter(item => item.productId !== action.productId)
+      }
     default:
       return state
   }

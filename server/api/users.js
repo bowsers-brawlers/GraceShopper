@@ -130,3 +130,18 @@ router.put('/:userId/orders/:orderId', async (req, res, next) => {
     next(error)
   }
 })
+
+router.delete(
+  '/:userId/order/:orderId/products/:productId',
+  async (req, res, next) => {
+    try {
+      const {userId, orderId, productId} = req.params
+      const product = await Products.findByPk(productId)
+      const order = await Order.findByPk(orderId)
+      await order.removeProduct(product)
+      res.sendStatus(204)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+)
