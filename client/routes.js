@@ -8,6 +8,7 @@ import AllUsers from './components/AllUsers'
 import SingleUser from './components/SingleUser'
 import AllProducts from './components/Products'
 import SingleProduct from './components/SingleProduct'
+import Cart from './components/Cart'
 
 import {fetchAllProducts} from './store/products'
 import {me} from './store'
@@ -48,6 +49,12 @@ class Routes extends Component {
           <Switch>
             {/* Routes placed here are only available after logging in */}
             <Route path="/home" component={UserHome} />
+            <Route
+              path="/cart"
+              render={routeProps => (
+                <Cart {...routeProps} loggedInUserId={loggedInUserId} />
+              )}
+            />
             <Route
               path="/all-users/:userId"
               component={SingleUser}
