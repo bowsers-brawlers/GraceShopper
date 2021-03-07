@@ -26,7 +26,7 @@ export class SingleProduct extends Component {
           <div className="product-info">
             <div className="product-name">{product.name}</div>
             <div className="product-description">{product.description}</div>
-            <div className="product-price"> {product.price}</div>
+            <div className="product-price"> {product.price / 100} </div>
             <div className="product-quantity">{product.quantity}</div>
           </div>
           <div>
