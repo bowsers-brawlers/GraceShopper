@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {fetchSingleProduct} from '../store/singleProduct'
+import {Link} from 'react-router-dom'
 
 export class SingleProduct extends Component {
   componentDidMount() {
@@ -9,24 +10,36 @@ export class SingleProduct extends Component {
   }
   render() {
     const product = this.props.singleProduct
+
     if (product) {
       return (
-        <div>
-          <h1>{product.name}</h1>
-          <h3>{product.description}</h3>
-          <h3> {product.price}</h3>
-          <h3>{product.quantity}</h3>
-          <img src={product.imageUrl} />
+        <section className="section product-view">
+          {this.props.isAdmin === 'true' ? (
+            <Link to={`/products/${product.id}/edit`}> Edit Product</Link>
+          ) : (
+            ''
+          )}
+
+          <figure>
+            <img src={product.imageUrl} />
+          </figure>
+          <div className="product-info">
+            <div className="product-name">{product.name}</div>
+            <div className="product-description">{product.description}</div>
+            <div className="product-price"> {product.price / 100} </div>
+            <div className="product-quantity">{product.quantity}</div>
+          </div>
           <div>
             <button>BUY NOW</button>
           </div>
-        </div>
+        </section>
       )
     } else {
       return <div>Loading...</div>
     }
   }
 }
+
 const mapState = state => {
   return {
     singleProduct: state.singleProductReducer

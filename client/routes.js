@@ -12,6 +12,7 @@ import SingleProduct from './components/SingleProduct'
 import {fetchAllProducts} from './store/products'
 import {me} from './store'
 import CreateProduct from './components/Products/CreateProduct'
+import EditProduct from './components/Products/EditProduct'
 import {fetchSingleUser} from './store/singleUser'
 
 /**
@@ -24,6 +25,7 @@ class Routes extends Component {
 
   render() {
     const {isLoggedIn, loggedInUserId, isAdmin} = this.props
+
     return (
       <Switch>
         {/* Routes placed here are available to all visitors */}
@@ -33,11 +35,15 @@ class Routes extends Component {
           path="/home"
           render={() => <AllProducts products={this.props.products} />}
         />
+        {/** EDIT PRODUCT **/}
+        <Route exact path="/products/:productId/edit" component={EditProduct} />
         <Route
           path="/products/:productId"
-          component={SingleProduct}
-          // render={(routeProps) => <SingleProduct {...routeProps} />}
+          render={routeProps => (
+            <SingleProduct {...routeProps} isAdmin={isAdmin} />
+          )}
         />
+
         {isLoggedIn && (
           <Switch>
             {/* Routes placed here are only available after logging in */}
@@ -101,6 +107,6 @@ export default withRouter(connect(mapState, mapDispatch)(Routes))
 Routes.propTypes = {
   loadInitialData: PropTypes.func.isRequired,
   isLoggedIn: PropTypes.bool.isRequired,
-  // isAdmin: PropTypes.bool,
+  isAdmin: PropTypes.string,
   products: PropTypes.array
 }
