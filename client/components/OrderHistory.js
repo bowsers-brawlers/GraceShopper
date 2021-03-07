@@ -30,7 +30,7 @@ class OrderHistory extends React.Component {
       )
     } else {
       return (
-        <div>{this.props.user.firstName} has not purchase any wine yet :(</div>
+        <div>{this.props.user.firstName} has not purchased any wine yet :(</div>
       )
     }
   }
