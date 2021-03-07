@@ -4,8 +4,8 @@ import {fetchSingleUser} from '../store/singleUser'
 
 class SingleUser extends React.Component {
   componentDidMount() {
-    console.log(this.props)
-    console.log('single user mounted')
+    // console.log(this.props)
+    // console.log('single user mounted')
     try {
       const userId = this.props.match.params.userId
       this.props.loadSingleUser(userId)
