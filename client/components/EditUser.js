@@ -19,10 +19,33 @@ export class EditUser extends React.Component {
   componentDidMount() {
     try {
       this.props.loadSingleUser(this.props.loggedInUserId)
-      console.log(this.state)
+      if (this.props.loggedInUserId) {
+        this.setState({
+          id: this.props.loggedInUserId || '',
+          firstName: this.props.currentUser.firstName || '',
+          lastName: this.props.currentUser.lastName || '',
+          email: this.props.currentUser.email || '',
+          password: this.props.currentUser.password || ''
+        })
+      }
     } catch (err) {
       console.log(err)
     }
+  }
+
+  componentDidUpdate(prevProps) {
+    //console.log('PREVPROPPPPPPSSSSSSS', prevProps)
+    if (!prevProps.currentUser.id && this.props.currentUser.id) {
+      console.log(this.props.currentUser.firstName)
+      this.setState({
+        id: this.props.currentUser.id,
+        firstName: this.props.currentUser.firstName,
+        lastName: this.props.currentUser.lastName,
+        email: this.props.currentUser.email,
+        password: this.props.currentUser.password
+      })
+    }
+    //console.log('-------------', this.props)
   }
 
   handleSubmit(evt) {
@@ -47,7 +70,7 @@ export class EditUser extends React.Component {
   }
 
   render() {
-    const {firstName, lastName, email} = this.props.currentUser || ''
+    const {firstName, lastName, email} = this.state
     return (
       <div>
         <form id="product-form" onSubmit={this.handleSubmit}>
@@ -57,8 +80,8 @@ export class EditUser extends React.Component {
               type="text"
               name="firstName"
               onChange={this.handleChange}
-              //value={firstName}
-              placeholder={firstName}
+              value={firstName}
+              placeholder="John"
               required
             />
           </div>
@@ -68,8 +91,8 @@ export class EditUser extends React.Component {
               type="text"
               name="lastName"
               onChange={this.handleChange}
-              //value={this.state.lastName}
-              placeholder={lastName}
+              value={lastName}
+              placeholder="Doe"
               required
             />
           </div>
@@ -79,8 +102,8 @@ export class EditUser extends React.Component {
               type="text"
               name="email"
               onChange={this.handleChange}
-              //value={email}
-              placeholder={email}
+              value={email}
+              placeholder="John@doe.com"
               required
             />
           </div>
