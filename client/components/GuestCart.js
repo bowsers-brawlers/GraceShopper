@@ -125,7 +125,10 @@ class GuestCart extends React.Component {
               type="button"
               onClick={() => {
                 this.props.removeFromGuestCart(item.id)
-                this.setState(() => JSON.parse(guestStorage.guestCart))
+                this.setState(state => ({
+                  ...state,
+                  order: JSON.parse(guestStorage.guestCart)
+                }))
               }}
             >
               X
