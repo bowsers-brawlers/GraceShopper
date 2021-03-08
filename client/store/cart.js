@@ -1,12 +1,18 @@
 import axios from 'axios'
 
+
 export const guestStorage = window.localStorage
+
 
 // action type
 const SET_CART = 'SET_CART'
 const COMPLETE_ORDER = 'COMPLETE_ORDER'
 const REMOVE_FROM_CART = 'REMOVE_FROM_CART'
+
 const REMOVE_FROM_GUEST_CART = 'REMOVE_FROM_GUEST_CART'
+
+const GET_ORDER_HISTORY = 'GET_ORDER_HISTORY'
+
 
 // action creator
 const _addToCart = productsInOrder => {
@@ -26,6 +32,7 @@ const _removeFromCart = productId => {
     productId
   }
 }
+
 const _removeFromGuestCart = productId => {
   return {
     type: REMOVE_FROM_GUEST_CART,
@@ -33,6 +40,25 @@ const _removeFromGuestCart = productId => {
   }
 }
 // thunk
+
+const getOrderHistory = data => {
+  return {
+    type: GET_ORDER_HISTORY,
+    data
+  }
+}
+// thunk
+export const fetchOrderHistory = userId => {
+  return async dispatch => {
+    try {
+      const data = (await axios.get(`/api/users/${userId}/order-history`)).data
+      dispatch(getOrderHistory(data))
+    } catch (error) {
+      console.log(error)
+    }
+  }
+}
+
 // *********** object passed into thunk needs: userId, productId, quantity ***********
 export const fetchCart = userId => {
   return async dispatch => {
@@ -44,6 +70,7 @@ export const fetchCart = userId => {
     }
   }
 }
+
 
 export const fetchGuestCart = cart => {
   return dispatch => {
@@ -84,6 +111,7 @@ export const setGuestCart = product => {
   }
 }
 
+
 export const addToCart = product => {
   return async dispatch => {
     try {
@@ -100,10 +128,12 @@ export const addToCart = product => {
   }
 }
 
+
 export const completeGuestOrder = () => {
   guestStorage.clear()
   return dispatch => dispatch(_completeOrder())
 }
+
 export const completeOrder = cartDetails => {
   const userId = cartDetails.user.id
   const orderId = cartDetails.order[0].orderId
@@ -117,6 +147,8 @@ export const completeOrder = cartDetails => {
     }
   }
 }
+
+
 
 export const updateCart = cartDetails => {
   const userId = cartDetails.user.id
@@ -133,11 +165,13 @@ export const updateCart = cartDetails => {
     }
   }
 }
+
 export const removeFromGuestCart = productId => {
   return dispatch => {
     dispatch(_removeFromGuestCart(productId))
   }
 }
+
 export const removeFromCart = cartDetails => {
   const {userId, orderId, productId} = cartDetails
   return async dispatch => {
@@ -153,7 +187,9 @@ export const removeFromCart = cartDetails => {
 }
 // reducer
 const initialState = {
-  cart: []
+
+  cart: [],
+  orderHistory: []
 }
 
 export default (state = initialState, action) => {
@@ -170,6 +206,7 @@ export default (state = initialState, action) => {
         ...state,
         cart: state.cart.filter(item => item.productId !== action.productId)
       }
+
     case REMOVE_FROM_GUEST_CART:
       if (guestStorage.guestCart) {
         const guestCart = JSON.parse(guestStorage.guestCart)
@@ -187,6 +224,10 @@ export default (state = initialState, action) => {
         ...state,
         cart: state.cart.filter(item => item.id !== action.productId)
       }
+
+
+    case GET_ORDER_HISTORY:
+      return {...state, orderHistory: action.data}
 
     default:
       return state

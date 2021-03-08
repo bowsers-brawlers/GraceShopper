@@ -10,6 +10,9 @@ import {
 } from '../store/cart'
 import {fetchSingleProduct} from '../store/singleProduct'
 
+import OrderHistory from './OrderHistory'
+
+
 class Cart extends React.Component {
   constructor(props) {
     super(props)
@@ -74,62 +77,74 @@ class Cart extends React.Component {
     const {products} = this.props
     const emptyCart = <div>{this.props.user.firstName}'s cart is empty</div>
     return this.state.order.length === 0 ? (
-      emptyCart
+
+      <div>
+        {emptyCart}
+        <hr />
+        <div>Order History</div>
+        <OrderHistory />
+      </div>
     ) : (
-      <form id="cart-form" onSubmit={this.handleSubmit}>
-        {this.props.cart.map((item, idx) => (
-          <div key={item.productId}>
-            <div>Name: {item.product.name}</div>
-            <label htmlFor={`cart-item-${item.productId}`}>
-              Quantity{' '}
-              <b>
-                {item.quantity >
-                products.filter(product => product.id === item.productId)[0]
-                  .quantity
-                  ? `THERE ARE ${
-                      products.filter(
-                        product => product.id === item.productId
-                      )[0].quantity
-                    } LEFT IN STOCK`
-                  : ''}
-              </b>
-            </label>
-            <input
-              name={`cart-item-${item.productId}`}
-              value={this.state.order[idx].quantity}
-              type="number"
-              min="0"
-              max={item.product.quantity}
-              required="required"
-              onChange={evt => this.handleChange(evt, item.productId)}
-            />
-            <div>Price: ${item.price / 100}</div>
+      <div>
+        <form id="cart-form" onSubmit={this.handleSubmit}>
+          {this.props.cart.map((item, idx) => (
+            <div key={item.productId}>
+              <div>Name: {item.product.name}</div>
+              <label htmlFor={`cart-item-${item.productId}`}>
+                Quantity{' '}
+                <b>
+                  {item.quantity >
+                  products.filter(product => product.id === item.productId)[0]
+                    .quantity
+                    ? `THERE ARE ${
+                        products.filter(
+                          product => product.id === item.productId
+                        )[0].quantity
+                      } LEFT IN STOCK`
+                    : ''}
+                </b>
+              </label>
+              <input
+                name={`cart-item-${item.productId}`}
+                value={this.state.order[idx].quantity}
+                type="number"
+                min="0"
+                max={item.product.quantity}
+                required="required"
+                onChange={evt => this.handleChange(evt, item.productId)}
+              />
+              <div>Price: ${item.price / 100}</div>
+              <button
+                type="button"
+                onClick={() =>
+                  this.props.removeFromCart({
+                    userId: this.props.user.id,
+                    orderId: item.orderId,
+                    productId: item.productId
+                  })
+                }
+              >
+                X
+              </button>
+            </div>
+          ))}
+          {this.props.cart.length > 0 ? (
             <button
-              type="button"
-              onClick={() =>
-                this.props.removeFromCart({
-                  userId: this.props.user.id,
-                  orderId: item.orderId,
-                  productId: item.productId
-                })
-              }
+              type="submit"
+              disabled={this.props.cart.length >= 1 ? '' : 'disabled'}
+              onSubmit={this.handleSubmit}
             >
-              X
+              Send me my Wine!
             </button>
-          </div>
-        ))}
-        {this.props.cart.length > 0 ? (
-          <button
-            type="submit"
-            disabled={this.props.cart.length > 1 ? 'disabled' : ''}
-            onSubmit={this.handleSubmit}
-          >
-            Send me my Wine!
-          </button>
-        ) : (
-          emptyCart
-        )}
-      </form>
+          ) : (
+            emptyCart
+          )}
+        </form>
+        <hr />
+        <div>Order History</div>
+        <OrderHistory />
+      </div>
+
     )
   }
 }

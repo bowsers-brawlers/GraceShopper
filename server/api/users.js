@@ -1,5 +1,8 @@
 const router = require('express').Router()
 const Sequelize = require('sequelize')
+
+const {Op} = Sequelize
+
 const {User, Order, Products, orderDetails} = require('../db/models')
 module.exports = router
 
@@ -26,6 +29,36 @@ router.get('/:userId', async (req, res, next) => {
     next(err)
   }
 })
+
+
+// order history
+router.get('/:userId/order-history', async (req, res, next) => {
+  try {
+    const {userId} = req.params
+    const userOrders = await Order.findAll({
+      attributes: ['id'],
+      where: {
+        userId: userId,
+        isComplete: 'true'
+      }
+    })
+    const orderIdArray = userOrders.map(order => order.dataValues.id)
+    const orders = await orderDetails.findAll({
+      where: {
+        orderId: {
+          [Op.in]: orderIdArray
+        }
+      },
+      include: {
+        model: Products
+      }
+    })
+    res.status(200).send(orders)
+  } catch (error) {
+    next(error)
+  }
+})
+
 
 // POST add item to cart ------------------------------------------------------
 // order.getProducts() gets the products from the Product model (quantity does not represent quantity the user adds to cart)

@@ -31,6 +31,8 @@ const Navbar = ({handleClick, isLoggedIn, isAdmin}) => (
             Logout
           </a>
 
+          <Link to="/edit">Edit My Account</Link>
+
           <Link to="/cart">Cart</Link>
 
           <AddProductButton isAdmin={isAdmin} />
