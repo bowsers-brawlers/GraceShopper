@@ -31,7 +31,8 @@ export class SingleProduct extends Component {
         imageUrl: this.props.singleProduct.imageUrl,
         name: this.props.singleProduct.name,
         price: this.props.singleProduct.price,
-        quantity: this.state.quantity
+        quantity: this.state.quantity,
+        quantityInDB: this.props.singleProduct.quantity
       })
     }
   }

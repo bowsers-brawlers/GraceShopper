@@ -178,6 +178,11 @@ export default (state = initialState, action) => {
           guestCart.filter(item => item.id !== action.productId)
         )
       }
+
+      console.log(
+        JSON.parse(guestStorage.guestCart),
+        'THIS IS LOCAL STORAGE AT THE REDUCER'
+      )
       return {
         ...state,
         cart: state.cart.filter(item => item.id !== action.productId)

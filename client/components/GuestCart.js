@@ -35,7 +35,7 @@ class GuestCart extends React.Component {
   componentWillUnmount() {
     if (this.state.order.length !== 0) {
       // this.props.setGuestCart(...this.state.order)
-      this.props.setGuestCart(...this.state.order)
+      // this.props.setGuestCart(...this.state.order)
     }
   }
 
@@ -45,7 +45,7 @@ class GuestCart extends React.Component {
     /* prevent ordersubmit thunk from firing if item stock in inventory is < stock in cart*/
     const {order} = this.state
     for (let item of order) {
-      await this.props.fetchSingleProduct(item.productId)
+      await this.props.fetchSingleProduct(item.id)
       let productInDB = this.props.singleProduct
       if (item.quantity > productInDB.quantity) {
         submit = false
@@ -63,22 +63,26 @@ class GuestCart extends React.Component {
     }
   }
   handleChange(evt, productId) {
+    guestStorage.setItem('guestCart', JSON.stringify(this.state.order))
     evt.persist()
     console.log(+evt.target.value, 'EVT')
     console.log(productId, 'PRODUCTIDA')
-    this.setState(state => ({
-      ...state,
-      order: state.order.map(item => {
-        if (item.id === productId) {
-          return {
-            ...item,
-            quantity: +evt.target.value
+    this.setState(
+      state => ({
+        ...state,
+        order: state.order.map(item => {
+          if (item.id === productId) {
+            return {
+              ...item,
+              quantity: +evt.target.value
+            }
+          } else {
+            return item
           }
-        } else {
-          return item
-        }
-      })
-    }))
+        })
+      }),
+      () => guestStorage.setItem('guestCart', JSON.stringify(this.state.order))
+    )
   }
   render() {
     const {products} = this.props
@@ -103,10 +107,7 @@ class GuestCart extends React.Component {
               <b>
                 {item.quantity >
                 products.filter(product => product.id === item.id)[0].quantity
-                  ? `THERE ARE ${
-                      products.filter(product => product.id === item.id)[0]
-                        .quantity
-                    } LEFT IN STOCK`
+                  ? `THERE ARE ${item.quantityInDB} LEFT IN STOCK`
                   : ''}
               </b>
             </label>
@@ -115,14 +116,17 @@ class GuestCart extends React.Component {
               value={this.state.order[idx].quantity}
               type="number"
               min="0"
-              max={item.quantity}
+              max={item.quantityInDB}
               required="required"
               onChange={evt => this.handleChange(evt, item.id)}
             />
             <div>Price: ${item.price / 100}</div>
             <button
               type="button"
-              onClick={() => this.props.removeFromGuestCart(item.id)}
+              onClick={() => {
+                this.props.removeFromGuestCart(item.id)
+                this.setState(() => JSON.parse(guestStorage.guestCart))
+              }}
             >
               X
             </button>
@@ -131,7 +135,7 @@ class GuestCart extends React.Component {
         {this.props.cart.length > 0 ? (
           <button
             type="submit"
-            disabled={this.props.cart.length > 1 ? 'disabled' : ''}
+            disabled={this.props.cart.length < 1 ? 'disabled' : ''}
             onSubmit={this.handleSubmit}
           >
             Send me my Wine!
