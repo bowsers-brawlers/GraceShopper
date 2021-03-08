@@ -24,12 +24,13 @@ class GuestCart extends React.Component {
     if (guestStorage.guestCart) {
       console.log(JSON.parse(guestStorage.guestCart), 'THIS IS THE GUEST CART')
       this.props.fetchGuestCart(JSON.parse(guestStorage.guestCart))
-    }
-    this.setState(state => ({
-      ...state,
 
-      order: JSON.parse(guestStorage.guestCart)
-    }))
+      this.setState(state => ({
+        ...state,
+
+        order: JSON.parse(guestStorage.guestCart)
+      }))
+    }
   }
   componentWillUnmount() {
     if (this.state.order.length !== 0) {
@@ -68,7 +69,7 @@ class GuestCart extends React.Component {
     this.setState(state => ({
       ...state,
       order: state.order.map(item => {
-        if (item.productId === productId) {
+        if (item.id === productId) {
           return {
             ...item,
             quantity: +evt.target.value

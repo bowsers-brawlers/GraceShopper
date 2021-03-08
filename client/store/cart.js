@@ -57,10 +57,25 @@ export const setGuestCart = product => {
     //   id: product.productId,
     //   quantity: product.quantity,
     // }
-    if (guestStorage.guestCart) {
-      const guestCart = JSON.parse(guestStorage.guestCart)
 
-      guestStorage.setItem('guestCart', JSON.stringify([...guestCart, product]))
+    if (guestStorage.guestCart) {
+      let guestCart = JSON.parse(guestStorage.guestCart)
+      if (guestCart.filter(wine => wine.id === product.id).length > 0) {
+        console.log('item is in local storage change quantity')
+        guestCart = guestCart.map(item => {
+          if (item.id === product.id) {
+            return {...item, quantity: product.quantity}
+          } else {
+            return item
+          }
+        })
+        guestStorage.setItem('guestCart', JSON.stringify(guestCart))
+      } else {
+        guestStorage.setItem(
+          'guestCart',
+          JSON.stringify([...guestCart, product])
+        )
+      }
     } else {
       guestStorage.setItem('guestCart', JSON.stringify([product]))
     }
@@ -86,6 +101,7 @@ export const addToCart = product => {
 }
 
 export const completeGuestOrder = () => {
+  guestStorage.clear()
   return dispatch => dispatch(_completeOrder())
 }
 export const completeOrder = cartDetails => {
