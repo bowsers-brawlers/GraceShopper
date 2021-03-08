@@ -46,7 +46,7 @@ export const deleteProduct = (id, history) => {
     const removeProduct = await axios.delete(`/api/products/${id}`)
     dispatch(_deleteProduct(removeProduct))
     dispatch(fetchAllProducts())
-    history.push('/home')
+    history.push('/')
   }
 }
 

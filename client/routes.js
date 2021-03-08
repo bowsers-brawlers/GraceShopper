@@ -34,7 +34,7 @@ class Routes extends Component {
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />
         <Route
-          path="/home"
+          path="/"
           render={() => <AllProducts products={this.props.products} />}
         />
         {/** EDIT PRODUCT **/}

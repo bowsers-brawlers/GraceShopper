@@ -20,13 +20,13 @@ const AddProductButton = ({isAdmin}) => {
 const Navbar = ({handleClick, isLoggedIn, isAdmin}) => (
   <div className="section">
     <h1 className="title">
-      <Link to="/home">Wine</Link>
+      <Link to="/">Wine</Link>
     </h1>
     <nav>
       {isLoggedIn ? (
         <div>
           {/* The navbar will show these links after you log in */}
-          <Link to="/home">Home</Link>
+          <Link to="/">Home</Link>
           <a href="#" onClick={handleClick}>
             Logout
           </a>
