@@ -12,7 +12,6 @@ import Cart from './components/Cart'
 
 import GuestCart from './components/GuestCart'
 
-
 import {fetchAllProducts} from './store/products'
 import {me} from './store'
 import CreateProduct from './components/Products/CreateProduct'
@@ -20,7 +19,6 @@ import EditProduct from './components/Products/EditProduct'
 
 import {fetchSingleUser} from './store/singleUser'
 import EditUser from './components/EditUser'
-
 
 /**
  * COMPONENT
@@ -38,10 +36,10 @@ class Routes extends Component {
         {/* Routes placed here are available to all visitors */}
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />
-        <Route
+        {/* <Route
           path="/"
           render={() => <AllProducts products={this.props.products} />}
-        />
+        /> */}
 
         <Route path="/guest-cart" component={GuestCart} />
 
@@ -87,8 +85,16 @@ class Routes extends Component {
                 <CreateProduct {...routeProps} isAdmin={isAdmin} />
               )}
             />
+            <Route
+              path="/"
+              render={() => <AllProducts products={this.props.products} />}
+            />
           </Switch>
         )}
+        <Route
+          path="/"
+          render={() => <AllProducts products={this.props.products} />}
+        />
         {/* Displays our Login component as a fallback */}
         <Route component={Login} />
       </Switch>
