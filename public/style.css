@@ -29,12 +29,13 @@ form div {
   display: grid;
   grid-template-columns: auto auto auto;
 }
+/* Tablet View */
 @media (min-width: 769px) and (max-width: 1215px) {
   .all-products {
     grid-template-columns: auto auto;
   }
 }
-
+/* Mobile View */
 @media (max-width: 768px) {
   .all-products {
     grid-template-columns: auto;
