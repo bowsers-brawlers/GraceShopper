@@ -135,7 +135,7 @@ class GuestCart extends React.Component {
             </button>
           </div>
         ))}
-        {this.props.cart.length > 0 ? (
+        {/* {this.props.cart.length > 0 ? (
           <button
             type="submit"
             disabled={this.props.cart.length < 1 ? 'disabled' : ''}
@@ -145,7 +145,7 @@ class GuestCart extends React.Component {
           </button>
         ) : (
           emptyCart
-        )}
+        )} */}
       </form>
     )
   }
