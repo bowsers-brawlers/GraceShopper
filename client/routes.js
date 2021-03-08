@@ -15,6 +15,7 @@ import {me} from './store'
 import CreateProduct from './components/Products/CreateProduct'
 import EditProduct from './components/Products/EditProduct'
 import {fetchSingleUser} from './store/singleUser'
+import EditUser from './components/EditUser'
 
 /**
  * COMPONENT
@@ -59,6 +60,12 @@ class Routes extends Component {
               path="/all-users/:userId"
               component={SingleUser}
               // render={routeProps => <SingleUser {...routeProps} />}
+            />
+            <Route
+              path="/edit"
+              render={routeProps => (
+                <EditUser {...routeProps} loggedInUserId={loggedInUserId} />
+              )}
             />
             <Route
               path="/all-users"
