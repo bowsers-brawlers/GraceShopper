@@ -11,7 +11,7 @@ const product = {
   quantity: 400,
   imageUrl: 'wine.com'
 }
-describe('Action creator', () => {
+xdescribe('Action creator', () => {
   describe('getSingleProduct', () => {
     it('returns properly formatted action', () => {
       expect(getSingleProduct(product)).to.be.deep.equal({
@@ -22,7 +22,7 @@ describe('Action creator', () => {
   })
 })
 
-describe('Reducer', () => {
+xdescribe('Reducer', () => {
   it('returns the initial state by default', () => {
     // creates a store (for testing) using your (real) reducer
     const store = createStore(singleProductReducer, applyMiddleware())

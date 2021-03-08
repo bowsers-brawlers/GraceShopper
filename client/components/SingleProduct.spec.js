@@ -11,7 +11,7 @@ import SingleProduct from './SingleProduct'
 // // const adapter = new Adapter()
 // // enzyme.configure({adapter})
 
-describe('Single Product Component', () => {
+xdescribe('Single Product Component', () => {
   const powderedWine = {
     id: 2,
     name: 'powdered Wine',
