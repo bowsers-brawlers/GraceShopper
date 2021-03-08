@@ -15,15 +15,6 @@ router.get('/', async (req, res, next) => {
     next(err)
   }
 })
-router.put('/:userId', async (req, res, next) => {
-  try {
-    console.log('req.BODY', console.log(req.body))
-    const user = await User.findByPk(req.body.id)
-    res.send(await user.update(req.body))
-  } catch (err) {
-    next(err)
-  }
-})
 
 router.get('/:userId', async (req, res, next) => {
   try {
