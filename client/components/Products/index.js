@@ -13,6 +13,7 @@ export function AllProducts({products}) {
               <img src={product.imageUrl} alt={product.name} width="200px" />
             </figure>
             <div className="title">{product.name}</div>
+            <div>{product.quantity ? '' : 'Out of stock'}</div>
             <div className="product-price">${product.price / 100}</div>
           </div>
         </Link>

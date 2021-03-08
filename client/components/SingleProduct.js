@@ -53,9 +53,14 @@ export class SingleProduct extends Component {
           <div className="product-info">
             <div className="product-name">{product.name}</div>
             <div className="product-description">{product.description}</div>
-            <div className="product-price"> {product.price / 100} </div>
-            <div className="product-quantity">{product.quantity}</div>
+            <div className="product-price"> ${product.price / 100} </div>
+            <div className="product-quantity">
+              {product.quantity
+                ? 'In Stock: ' + product.quantity
+                : 'Out of stock'}
+            </div>
           </div>
+
           <form id="single-product-form" onSubmit={this.handleSubmit}>
             <label htmlFor="quantity">Quantity</label>
             <input
@@ -66,6 +71,7 @@ export class SingleProduct extends Component {
               min="1"
               max={product.quantity}
             />
+
             <button type="submit" onSubmit={this.handleSubmit}>
               Add to cart!
             </button>
