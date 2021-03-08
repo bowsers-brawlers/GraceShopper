@@ -1,5 +1,6 @@
 const router = require('express').Router()
 const Sequelize = require('sequelize')
+const {Op} = Sequelize
 const {User, Order, Products, orderDetails} = require('../db/models')
 module.exports = router
 
@@ -24,6 +25,34 @@ router.get('/:userId', async (req, res, next) => {
     res.json(user)
   } catch (err) {
     next(err)
+  }
+})
+
+// order history
+router.get('/:userId/order-history', async (req, res, next) => {
+  try {
+    const {userId} = req.params
+    const userOrders = await Order.findAll({
+      attributes: ['id'],
+      where: {
+        userId: userId,
+        isComplete: 'true'
+      }
+    })
+    const orderIdArray = userOrders.map(order => order.dataValues.id)
+    const orders = await orderDetails.findAll({
+      where: {
+        orderId: {
+          [Op.in]: orderIdArray
+        }
+      },
+      include: {
+        model: Products
+      }
+    })
+    res.status(200).send(orders)
+  } catch (error) {
+    next(error)
   }
 })
 
