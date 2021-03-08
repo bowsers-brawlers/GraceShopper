@@ -10,12 +10,17 @@ import AllProducts from './components/Products'
 import SingleProduct from './components/SingleProduct'
 import Cart from './components/Cart'
 
+import GuestCart from './components/GuestCart'
+
+
 import {fetchAllProducts} from './store/products'
 import {me} from './store'
 import CreateProduct from './components/Products/CreateProduct'
 import EditProduct from './components/Products/EditProduct'
+
 import {fetchSingleUser} from './store/singleUser'
 import EditUser from './components/EditUser'
+
 
 /**
  * COMPONENT
@@ -37,6 +42,9 @@ class Routes extends Component {
           path="/home"
           render={() => <AllProducts products={this.props.products} />}
         />
+
+        <Route path="/guest-cart" component={GuestCart} />
+
         {/** EDIT PRODUCT **/}
         <Route exact path="/products/:productId/edit" component={EditProduct} />
         <Route

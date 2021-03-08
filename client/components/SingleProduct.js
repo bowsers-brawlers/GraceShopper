@@ -2,7 +2,9 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {fetchSingleProduct} from '../store/singleProduct'
 
-import {addToCart} from '../store/cart'
+
+import {addToCart, setGuestCart} from '../store/cart'
+
 import {Link} from 'react-router-dom'
 
 export class SingleProduct extends Component {
@@ -25,6 +27,17 @@ export class SingleProduct extends Component {
         productId: this.props.singleProduct.id,
         quantity: this.state.quantity
       })
+
+    } else {
+      this.props.setGuestCart({
+        id: this.props.singleProduct.id,
+        imageUrl: this.props.singleProduct.imageUrl,
+        name: this.props.singleProduct.name,
+        price: this.props.singleProduct.price,
+        quantity: this.state.quantity,
+        quantityInDB: this.props.singleProduct.quantity
+      })
+
     }
   }
   handleChange(evt) {
@@ -89,7 +102,10 @@ const mapState = state => {
 const mapDispatch = dispatch => {
   return {
     getSingleProduct: id => dispatch(fetchSingleProduct(id)),
-    addToCart: product => dispatch(addToCart(product))
+
+    addToCart: product => dispatch(addToCart(product)),
+    setGuestCart: product => dispatch(setGuestCart(product))
+
   }
 }
 
