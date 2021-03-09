@@ -19,15 +19,10 @@ class GuestCart extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this)
   }
   componentDidMount() {
-    // console.dir(JSON.parse(guestStorage.guestCart))
-
     if (guestStorage.guestCart) {
-      console.log(JSON.parse(guestStorage.guestCart), 'THIS IS THE GUEST CART')
       this.props.fetchGuestCart(JSON.parse(guestStorage.guestCart))
-
       this.setState(state => ({
         ...state,
-
         order: JSON.parse(guestStorage.guestCart)
       }))
     }
@@ -65,8 +60,6 @@ class GuestCart extends React.Component {
   handleChange(evt, productId) {
     guestStorage.setItem('guestCart', JSON.stringify(this.state.order))
     evt.persist()
-    console.log(+evt.target.value, 'EVT')
-    console.log(productId, 'PRODUCTIDA')
     this.setState(
       state => ({
         ...state,
@@ -86,12 +79,6 @@ class GuestCart extends React.Component {
   }
   render() {
     const {products} = this.props
-    console.log('Guestcart is rerendering ====================================')
-    console.log(products, 'THIS IS PRODUCTS')
-    console.log(this.state, 'THIS IS STATTE')
-    console.log(this.props, 'THIS IS PROPS')
-    // console.log(JSON.parse(guestStorage.guestCart), 'THIS IS LOCALSTORAGE')
-
     const emptyCart = <div>The guest cart is empty</div>
     return this.props.cart.length === 0 ||
       this.props.products.length === 0 ||

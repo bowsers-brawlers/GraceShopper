@@ -80,15 +80,9 @@ export const fetchGuestCart = cart => {
 
 export const setGuestCart = product => {
   return dispatch => {
-    // const body = {
-    //   id: product.productId,
-    //   quantity: product.quantity,
-    // }
-
     if (guestStorage.guestCart) {
       let guestCart = JSON.parse(guestStorage.guestCart)
       if (guestCart.filter(wine => wine.id === product.id).length > 0) {
-        console.log('item is in local storage change quantity')
         guestCart = guestCart.map(item => {
           if (item.id === product.id) {
             return {...item, quantity: product.quantity}
@@ -114,7 +108,6 @@ export const setGuestCart = product => {
 export const addToCart = product => {
   return async dispatch => {
     try {
-      console.log(product)
       const {userId} = product
       const body = {
         id: product.productId,
@@ -130,10 +123,9 @@ export const addToCart = product => {
 
 // if there is overlap between localStorage cart and DB user cart, quantity is overwritten with quantity from local storage
 export const transitionCart = userId => {
-  return dispatch => {
+  return async dispatch => {
     try {
       const lsCart = JSON.parse(guestStorage.guestCart)
-      console.log('guestStorage-----------------------', lsCart)
       guestStorage.guestCart = []
       // get open order (or create new one if does not exist)
       if (lsCart.length > 0) {
@@ -143,7 +135,7 @@ export const transitionCart = userId => {
             productId: item.id,
             quantity: item.quantity
           }
-          dispatch(addToCart(product))
+          await dispatch(addToCart(product))
         }
       }
 
@@ -158,6 +150,7 @@ export const completeGuestOrder = () => {
   guestStorage.clear()
   return dispatch => dispatch(_completeOrder())
 }
+
 export const completeOrder = cartDetails => {
   const userId = cartDetails.user.id
   const orderId = cartDetails.order[0].orderId
@@ -165,6 +158,7 @@ export const completeOrder = cartDetails => {
   return async dispatch => {
     try {
       await axios.put(`/api/users/${userId}/orders/${orderId}`, cartDetails)
+      if (userId) await dispatch(fetchOrderHistory(userId))
       dispatch(_completeOrder())
     } catch (error) {
       console.log(error)

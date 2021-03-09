@@ -89,3 +89,8 @@ form div {
   border-radius: 50%;
   padding: 0.2rem;
 }
+
+#cart-form {
+  display: flex;
+  flex-direction: column;
+}
