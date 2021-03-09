@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
-import {Link} from 'react-router-dom'
+import {Link, NavLink} from 'react-router-dom'
 import {logout} from '../store'
 
 const AddProductButton = ({isAdmin}) => {
@@ -17,20 +17,35 @@ const AddProductButton = ({isAdmin}) => {
   }
 }
 
+const MainNav = () => {
+  return (
+    <nav>
+      <NavLink to="/">Home</NavLink>
+      <NavLink to="/red-wine">Red</NavLink>
+      <NavLink to="/white-wine">White</NavLink>
+      <NavLink to="/rose-wine">Rose</NavLink>
+      <NavLink to="/sparkling">Sparkling</NavLink>
+      <NavLink to="/port">Port</NavLink>
+    </nav>
+  )
+}
+
 const Navbar = ({handleClick, isLoggedIn, isAdmin}) => (
   <div className="section">
     <h1 className="title">
-      <Link to="/home">Wine</Link>
+      <Link to="/">Wine</Link>
     </h1>
     <nav>
       {isLoggedIn ? (
         <div>
           {/* The navbar will show these links after you log in */}
-          <Link to="/home">Home</Link>
+          <MainNav />
           <a href="#" onClick={handleClick}>
             Logout
           </a>
+
           <Link to="/edit">Edit My Account</Link>
+
           <Link to="/cart">Cart</Link>
 
           <AddProductButton isAdmin={isAdmin} />
@@ -40,6 +55,7 @@ const Navbar = ({handleClick, isLoggedIn, isAdmin}) => (
           {/* The navbar will show these links before you log in */}
           <Link to="/login">Login</Link>
           <Link to="/signup">Sign Up</Link>
+          <Link to="/guest-cart">Cart</Link>
         </div>
       )}
     </nav>

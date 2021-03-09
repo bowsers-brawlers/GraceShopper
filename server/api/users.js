@@ -1,7 +1,10 @@
 const router = require('express').Router()
 const Sequelize = require('sequelize')
+
 const {protectedRoute, protectedId} = require('./protect.js')
+
 const {Op} = Sequelize
+
 const {User, Order, Products, orderDetails} = require('../db/models')
 module.exports = router
 
@@ -28,6 +31,7 @@ router.get('/:userId', protectedId, async (req, res, next) => {
     next(err)
   }
 })
+
 
 // order history
 router.get('/:userId/order-history', protectedId, async (req, res, next) => {
@@ -56,6 +60,7 @@ router.get('/:userId/order-history', protectedId, async (req, res, next) => {
     next(error)
   }
 })
+
 
 // POST add item to cart ------------------------------------------------------
 // order.getProducts() gets the products from the Product model (quantity does not represent quantity the user adds to cart)

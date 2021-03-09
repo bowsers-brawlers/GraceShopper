@@ -9,7 +9,9 @@ import {
   removeFromCart
 } from '../store/cart'
 import {fetchSingleProduct} from '../store/singleProduct'
+
 import OrderHistory from './OrderHistory'
+
 
 class Cart extends React.Component {
   constructor(props) {
@@ -75,6 +77,7 @@ class Cart extends React.Component {
     const {products} = this.props
     const emptyCart = <div>{this.props.user.firstName}'s cart is empty</div>
     return this.state.order.length === 0 ? (
+
       <div>
         {emptyCart}
         <hr />
@@ -141,6 +144,7 @@ class Cart extends React.Component {
         <div>Order History</div>
         <OrderHistory />
       </div>
+
     )
   }
 }

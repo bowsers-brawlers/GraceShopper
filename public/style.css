@@ -29,12 +29,13 @@ form div {
   display: grid;
   grid-template-columns: auto auto auto;
 }
+/* Tablet View */
 @media (min-width: 769px) and (max-width: 1215px) {
   .all-products {
     grid-template-columns: auto auto;
   }
 }
-
+/* Mobile View */
 @media (max-width: 768px) {
   .all-products {
     grid-template-columns: auto;
@@ -87,4 +88,31 @@ form div {
   font-size: 1.2rem;
   border-radius: 50%;
   padding: 0.2rem;
+}
+
+.product-view {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.product-info {
+  display: flex;
+}
+
+@media (max-width: 425px) {
+  .product-info {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.product-info div {
+  width: 50%;
+  min-width: 200px;
+}
+
+.control {
+  display: flex;
+  flex-direction: row;
 }
