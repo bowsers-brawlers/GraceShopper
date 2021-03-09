@@ -1,8 +1,6 @@
 import axios from 'axios'
 
-
 export const guestStorage = window.localStorage
-
 
 // action type
 const SET_CART = 'SET_CART'
@@ -13,7 +11,6 @@ const REMOVE_FROM_GUEST_CART = 'REMOVE_FROM_GUEST_CART'
 
 const GET_ORDER_HISTORY = 'GET_ORDER_HISTORY'
 
-
 // action creator
 const _addToCart = productsInOrder => {
   return {
@@ -21,9 +18,10 @@ const _addToCart = productsInOrder => {
     productsInOrder
   }
 }
-const _completeOrder = () => {
+const _completeOrder = order => {
   return {
-    type: COMPLETE_ORDER
+    type: COMPLETE_ORDER,
+    order
   }
 }
 const _removeFromCart = productId => {
@@ -37,6 +35,13 @@ const _removeFromGuestCart = productId => {
   return {
     type: REMOVE_FROM_GUEST_CART,
     productId
+  }
+}
+
+const _completeGuestOrder = id => {
+  return {
+    type: COMPLETE_GUEST_ORDER,
+    id
   }
 }
 // thunk
@@ -70,7 +75,6 @@ export const fetchCart = userId => {
     }
   }
 }
-
 
 export const fetchGuestCart = cart => {
   return dispatch => {
@@ -111,7 +115,6 @@ export const setGuestCart = product => {
   }
 }
 
-
 export const addToCart = product => {
   return async dispatch => {
     try {
@@ -128,10 +131,21 @@ export const addToCart = product => {
   }
 }
 
-
-export const completeGuestOrder = () => {
+export const completeGuestOrder = guestCart => {
+  console.log(guestCart, 'GUESTCART FROM COMPLETE GUEST ORDER')
   guestStorage.clear()
-  return dispatch => dispatch(_completeOrder())
+  return async dispatch => {
+    try {
+      const order = await (await axios.post(
+        '/api/users/guest/orders',
+        guestCart
+      )).data
+
+      dispatch(_completeOrder(order))
+    } catch (err) {
+      console.log(err)
+    }
+  }
 }
 
 export const completeOrder = cartDetails => {
@@ -147,8 +161,6 @@ export const completeOrder = cartDetails => {
     }
   }
 }
-
-
 
 export const updateCart = cartDetails => {
   const userId = cartDetails.user.id
@@ -187,9 +199,9 @@ export const removeFromCart = cartDetails => {
 }
 // reducer
 const initialState = {
-
   cart: [],
-  orderHistory: []
+  orderHistory: [],
+  guestOrder: {}
 }
 
 export default (state = initialState, action) => {
@@ -200,7 +212,15 @@ export default (state = initialState, action) => {
     case SET_CART:
       return {...state, cart: action.productsInOrder}
     case COMPLETE_ORDER:
-      return {...state, cart: []}
+      if (action.order) {
+        return {
+          ...state,
+          cart: [],
+          guestOrder: action.order
+        }
+      } else {
+        return {...state, cart: []}
+      }
     case REMOVE_FROM_CART:
       return {
         ...state,
@@ -224,7 +244,6 @@ export default (state = initialState, action) => {
         ...state,
         cart: state.cart.filter(item => item.id !== action.productId)
       }
-
 
     case GET_ORDER_HISTORY:
       return {...state, orderHistory: action.data}

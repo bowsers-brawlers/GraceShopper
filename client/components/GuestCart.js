@@ -55,7 +55,8 @@ class GuestCart extends React.Component {
       }
     }
     if (submit) {
-      await this.props.completeGuestOrder()
+      await this.props.completeGuestOrder(JSON.parse(guestStorage.guestCart))
+
       this.setState(state => ({
         ...state,
         order: []
@@ -90,9 +91,21 @@ class GuestCart extends React.Component {
     console.log(products, 'THIS IS PRODUCTS')
     console.log(this.state, 'THIS IS STATTE')
     console.log(this.props, 'THIS IS PROPS')
+
     // console.log(JSON.parse(guestStorage.guestCart), 'THIS IS LOCALSTORAGE')
 
-    const emptyCart = <div>The guest cart is empty</div>
+    const emptyCart = this.props.guestOrder.id ? (
+      <div>
+        {' '}
+        Order ID: {this.props.guestOrder.id} on{' '}
+        {this.props.guestOrder.createdAt}
+      </div>
+    ) : (
+      <div>
+        <div>The guest cart is empty</div>
+      </div>
+    )
+
     return this.props.cart.length === 0 ||
       this.props.products.length === 0 ||
       this.state.order.length === 0 ? (
@@ -135,7 +148,7 @@ class GuestCart extends React.Component {
             </button>
           </div>
         ))}
-        {/* {this.props.cart.length > 0 ? (
+        {this.props.cart.length > 0 ? (
           <button
             type="submit"
             disabled={this.props.cart.length < 1 ? 'disabled' : ''}
@@ -145,7 +158,7 @@ class GuestCart extends React.Component {
           </button>
         ) : (
           emptyCart
-        )} */}
+        )}
       </form>
     )
   }
@@ -154,7 +167,7 @@ class GuestCart extends React.Component {
 const mapState = state => {
   return {
     cart: state.cart.cart,
-
+    guestOrder: state.cart.guestOrder,
     products: state.products,
     singleProduct: state.singleProductReducer
   }
