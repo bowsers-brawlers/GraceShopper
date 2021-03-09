@@ -21,11 +21,11 @@ const MainNav = () => {
   return (
     <nav>
       <NavLink to="/">Home</NavLink>
-      <NavLink to="/red-wine">Red</NavLink>
-      <NavLink to="/white-wine">White</NavLink>
-      <NavLink to="/rose-wine">Rose</NavLink>
-      <NavLink to="/sparkling">Sparkling</NavLink>
-      <NavLink to="/port">Port</NavLink>
+      <NavLink to="/category/red-wine">Red</NavLink>
+      <NavLink to="/category/white-wine">White</NavLink>
+      <NavLink to="/category/rose-wine">Rose</NavLink>
+      <NavLink to="/category/sparkling">Sparkling</NavLink>
+      <NavLink to="/category/port">Port</NavLink>
     </nav>
   )
 }

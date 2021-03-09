@@ -10,7 +10,7 @@ export const _filteredProducts = category => ({
 export const filteredProducts = slug => {
   return async dispatch => {
     try {
-      const filter = (await axios.get('/api/' + slug)).data
+      const filter = (await axios.get('/api/category/' + slug)).data
       dispatch(_filteredProducts(filter))
     } catch (e) {
       console.log(e)
