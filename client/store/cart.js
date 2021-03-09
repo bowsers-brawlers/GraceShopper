@@ -10,6 +10,7 @@ const REMOVE_FROM_GUEST_CART = 'REMOVE_FROM_GUEST_CART'
 const GET_ORDER_HISTORY = 'GET_ORDER_HISTORY'
 const TRANSITION_CART = 'TRANSITION_CART'
 
+
 // action creator
 const _addToCart = productsInOrder => {
   return {
@@ -17,9 +18,10 @@ const _addToCart = productsInOrder => {
     productsInOrder
   }
 }
-const _completeOrder = () => {
+const _completeOrder = order => {
   return {
-    type: COMPLETE_ORDER
+    type: COMPLETE_ORDER,
+    order
   }
 }
 const _removeFromCart = productId => {
@@ -35,11 +37,13 @@ const _removeFromGuestCart = productId => {
     productId
   }
 }
+
 const _transitionCart = () => {
   return {
     type: TRANSITION_CART
   }
 }
+
 
 // thunk
 const getOrderHistory = data => {
@@ -121,6 +125,7 @@ export const addToCart = product => {
   }
 }
 
+
 // if there is overlap between localStorage cart and DB user cart, quantity is overwritten with quantity from local storage
 export const transitionCart = userId => {
   return async dispatch => {
@@ -146,9 +151,20 @@ export const transitionCart = userId => {
   }
 }
 
-export const completeGuestOrder = () => {
+export const completeGuestOrder = guestCart => {
   guestStorage.clear()
-  return dispatch => dispatch(_completeOrder())
+  return async dispatch => {
+    try {
+      const order = await (await axios.post(
+        '/api/users/guest/orders',
+        guestCart
+      )).data
+
+      dispatch(_completeOrder(order))
+    } catch (err) {
+      console.log(err)
+    }
+  }
 }
 
 export const completeOrder = cartDetails => {
@@ -205,7 +221,8 @@ export const removeFromCart = cartDetails => {
 // reducer
 const initialState = {
   cart: [],
-  orderHistory: []
+  orderHistory: [],
+  guestOrder: {}
 }
 
 export default (state = initialState, action) => {
@@ -216,7 +233,15 @@ export default (state = initialState, action) => {
     case SET_CART:
       return {...state, cart: action.productsInOrder}
     case COMPLETE_ORDER:
-      return {...state, cart: []}
+      if (action.order) {
+        return {
+          ...state,
+          cart: [],
+          guestOrder: action.order
+        }
+      } else {
+        return {...state, cart: []}
+      }
     case REMOVE_FROM_CART:
       return {
         ...state,

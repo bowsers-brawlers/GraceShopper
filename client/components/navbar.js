@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
-import {Link} from 'react-router-dom'
+import {Link, NavLink} from 'react-router-dom'
 import {logout} from '../store'
 
 const AddProductButton = ({isAdmin}) => {
@@ -17,6 +17,19 @@ const AddProductButton = ({isAdmin}) => {
   }
 }
 
+const MainNav = () => {
+  return (
+    <nav>
+      <NavLink to="/">Home</NavLink>
+      <NavLink to="/category/red-wine">Red</NavLink>
+      <NavLink to="/category/white-wine">White</NavLink>
+      <NavLink to="/category/rose-wine">Rose</NavLink>
+      <NavLink to="/category/sparkling">Sparkling</NavLink>
+      <NavLink to="/category/port">Port</NavLink>
+    </nav>
+  )
+}
+
 const Navbar = ({handleClick, isLoggedIn, isAdmin}) => (
   <div className="section">
     <h1 className="title">
@@ -26,7 +39,7 @@ const Navbar = ({handleClick, isLoggedIn, isAdmin}) => (
       {isLoggedIn ? (
         <div>
           {/* The navbar will show these links after you log in */}
-          <Link to="/">Home</Link>
+          <MainNav />
           <a href="#" onClick={handleClick}>
             Logout
           </a>
