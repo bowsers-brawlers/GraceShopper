@@ -66,23 +66,9 @@ Products.belongsTo(Category, {as: 'category'})
 //   'createOrder'
 // ]
 
-/** Category
- * [
- '_customGetters',    '_customSetters',
- 'validators',        '_hasCustomGetters',
- '_hasCustomSetters', 'rawAttributes',
- '_isAttribute',      'getProducts',
- 'countProducts',     'hasProduct',
- 'hasProducts',       'setProducts',
- 'addProduct',        'addProducts',
- 'removeProduct',     'removeProducts',
- 'createProduct'
- ]
 
- */
+//console.log(Object.keys(User.prototype))
 
-// console.log("Magic Methods: ", Object.keys(Products.prototype))
-// console.log("Magic Methods: ", Object.keys(Category.prototype))
 
 module.exports = {
   User,

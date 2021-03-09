@@ -1,5 +1,6 @@
 const router = require('express').Router()
 const {Products} = require('../db/models')
+const {protectedRoute, protectedId} = require('./protect.js')
 module.exports = router
 
 router.get('/', async (req, res, next) => {
@@ -20,7 +21,7 @@ router.get('/:productId', async (req, res, next) => {
   }
 })
 
-router.post('/', async (req, res, next) => {
+router.post('/', protectedRoute, async (req, res, next) => {
   try {
     res.status(201).send(await Products.create(req.body))
   } catch (e) {
@@ -28,7 +29,7 @@ router.post('/', async (req, res, next) => {
   }
 })
 
-router.put('/', async (req, res, next) => {
+router.put('/', protectedRoute, async (req, res, next) => {
   try {
     const product = await Products.findByPk(req.body.id)
     res.send(await product.update(req.body))
@@ -37,7 +38,7 @@ router.put('/', async (req, res, next) => {
   }
 })
 
-router.delete('/:productId', async (req, res, next) => {
+router.delete('/:productId', protectedRoute, async (req, res, next) => {
   try {
     const id = req.params.productId
     await Products.destroy({where: {id}})
