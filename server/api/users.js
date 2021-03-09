@@ -30,7 +30,6 @@ router.get('/:userId', async (req, res, next) => {
   }
 })
 
-
 // order history
 router.get('/:userId/order-history', async (req, res, next) => {
   try {
@@ -58,7 +57,6 @@ router.get('/:userId/order-history', async (req, res, next) => {
     next(error)
   }
 })
-
 
 // POST add item to cart ------------------------------------------------------
 // order.getProducts() gets the products from the Product model (quantity does not represent quantity the user adds to cart)

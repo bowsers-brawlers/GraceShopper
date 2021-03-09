@@ -341,10 +341,20 @@ var Cart = /*#__PURE__*/function (_React$Component) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                _context.next = 2;
+                if (!_store_cart__WEBPACK_IMPORTED_MODULE_3__["guestStorage"].guestCart) {
+                  _context.next = 3;
+                  break;
+                }
+
+                _context.next = 3;
+                return this.props.transitionCart(this.props.loggedInUserId);
+
+              case 3:
+                _context.next = 5;
                 return this.props.fetchCart(this.props.loggedInUserId);
 
-              case 2:
+              case 5:
+                console.log('this.props.cart after fetch cart-------------------------', this.props.cart);
                 this.setState(function (state) {
                   return _objectSpread(_objectSpread({}, state), {}, {
                     user: _this2.props.user,
@@ -352,7 +362,7 @@ var Cart = /*#__PURE__*/function (_React$Component) {
                   });
                 });
 
-              case 3:
+              case 7:
               case "end":
                 return _context.stop();
             }
@@ -367,6 +377,44 @@ var Cart = /*#__PURE__*/function (_React$Component) {
       return componentDidMount;
     }()
   }, {
+    key: "componentDidUpdate",
+    value: function componentDidUpdate() {
+      var _this3 = this;
+
+      var cart = this.props.cart;
+      var order = this.state.order;
+
+      if (cart.length > 0 && order.length > 0) {
+        var _iterator = _createForOfIteratorHelper(cart),
+            _step;
+
+        try {
+          var _loop = function _loop() {
+            var item = _step.value;
+            var orderItem = order.filter(function (i) {
+              return i.productId === item.productId;
+            })[0];
+
+            if (orderItem && orderItem.quantity && orderItem.quantity !== item.quantity) {
+              _this3.setState(function (state) {
+                return _objectSpread(_objectSpread({}, state), {}, {
+                  order: cart
+                });
+              });
+            }
+          };
+
+          for (_iterator.s(); !(_step = _iterator.n()).done;) {
+            _loop();
+          }
+        } catch (err) {
+          _iterator.e(err);
+        } finally {
+          _iterator.f();
+        }
+      }
+    }
+  }, {
     key: "componentWillUnmount",
     value: function componentWillUnmount() {
       if (this.state.order.length !== 0) {
@@ -377,7 +425,7 @@ var Cart = /*#__PURE__*/function (_React$Component) {
     key: "handleSubmit",
     value: function () {
       var _handleSubmit = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(evt) {
-        var submit, order, _iterator, _step, item, productInDB;
+        var submit, order, _iterator2, _step2, item, productInDB;
 
         return regeneratorRuntime.wrap(function _callee2$(_context2) {
           while (1) {
@@ -388,18 +436,18 @@ var Cart = /*#__PURE__*/function (_React$Component) {
                 /* prevent ordersubmit thunk from firing if item stock in inventory is < stock in cart*/
 
                 order = this.state.order;
-                _iterator = _createForOfIteratorHelper(order);
+                _iterator2 = _createForOfIteratorHelper(order);
                 _context2.prev = 4;
 
-                _iterator.s();
+                _iterator2.s();
 
               case 6:
-                if ((_step = _iterator.n()).done) {
+                if ((_step2 = _iterator2.n()).done) {
                   _context2.next = 14;
                   break;
                 }
 
-                item = _step.value;
+                item = _step2.value;
                 _context2.next = 10;
                 return this.props.fetchSingleProduct(item.productId);
 
@@ -423,12 +471,12 @@ var Cart = /*#__PURE__*/function (_React$Component) {
                 _context2.prev = 16;
                 _context2.t0 = _context2["catch"](4);
 
-                _iterator.e(_context2.t0);
+                _iterator2.e(_context2.t0);
 
               case 19:
                 _context2.prev = 19;
 
-                _iterator.f();
+                _iterator2.f();
 
                 return _context2.finish(19);
 
@@ -483,9 +531,10 @@ var Cart = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
-      var _this3 = this;
+      var _this4 = this;
 
-      console.log('cart is rerendering ====================================');
+      console.log('CART IS RENDERING', this.props.cart);
+      console.log('local state', this.state.order);
       var products = this.props.products;
       var emptyCart = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, this.props.user.firstName, "'s cart is empty");
       return this.state.order.length === 0 ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, emptyCart, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("hr", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "Order History"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_OrderHistory__WEBPACK_IMPORTED_MODULE_5__["default"], null)) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
@@ -502,19 +551,19 @@ var Cart = /*#__PURE__*/function (_React$Component) {
           return product.id === item.productId;
         })[0].quantity, " LEFT IN STOCK") : '')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
           name: "cart-item-".concat(item.productId),
-          value: _this3.state.order[idx].quantity,
+          value: _this4.state.order[idx] ? _this4.state.order[idx].quantity : item.quantity,
           type: "number",
           min: "0",
           max: item.product.quantity,
           required: "required",
           onChange: function onChange(evt) {
-            return _this3.handleChange(evt, item.productId);
+            return _this4.handleChange(evt, item.productId);
           }
         }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "Price: $", item.price / 100), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
           type: "button",
           onClick: function onClick() {
-            return _this3.props.removeFromCart({
-              userId: _this3.props.user.id,
+            return _this4.props.removeFromCart({
+              userId: _this4.props.user.id,
               orderId: item.orderId,
               productId: item.productId
             });
@@ -556,6 +605,9 @@ var mapDispatch = function mapDispatch(dispatch) {
     },
     removeFromCart: function removeFromCart(cartDetails) {
       return dispatch(Object(_store_cart__WEBPACK_IMPORTED_MODULE_3__["removeFromCart"])(cartDetails));
+    },
+    transitionCart: function transitionCart(userId) {
+      return dispatch(Object(_store_cart__WEBPACK_IMPORTED_MODULE_3__["transitionCart"])(userId));
     }
   };
 };
@@ -2742,7 +2794,7 @@ var initialState = {
 /*!******************************!*\
   !*** ./client/store/cart.js ***!
   \******************************/
-/*! exports provided: guestStorage, fetchOrderHistory, fetchCart, fetchGuestCart, setGuestCart, addToCart, completeGuestOrder, completeOrder, updateCart, removeFromGuestCart, removeFromCart, default */
+/*! exports provided: guestStorage, fetchOrderHistory, fetchCart, fetchGuestCart, setGuestCart, addToCart, transitionCart, completeGuestOrder, completeOrder, updateCart, removeFromGuestCart, removeFromCart, default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2753,6 +2805,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchGuestCart", function() { return fetchGuestCart; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setGuestCart", function() { return setGuestCart; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addToCart", function() { return addToCart; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "transitionCart", function() { return transitionCart; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "completeGuestOrder", function() { return completeGuestOrder; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "completeOrder", function() { return completeOrder; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "updateCart", function() { return updateCart; });
@@ -2760,6 +2813,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "removeFromCart", function() { return removeFromCart; });
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -2789,7 +2844,8 @@ var SET_CART = 'SET_CART';
 var COMPLETE_ORDER = 'COMPLETE_ORDER';
 var REMOVE_FROM_CART = 'REMOVE_FROM_CART';
 var REMOVE_FROM_GUEST_CART = 'REMOVE_FROM_GUEST_CART';
-var GET_ORDER_HISTORY = 'GET_ORDER_HISTORY'; // action creator
+var GET_ORDER_HISTORY = 'GET_ORDER_HISTORY';
+var TRANSITION_CART = 'TRANSITION_CART'; // action creator
 
 var _addToCart = function _addToCart(productsInOrder) {
   return {
@@ -2815,6 +2871,12 @@ var _removeFromGuestCart = function _removeFromGuestCart(productId) {
   return {
     type: REMOVE_FROM_GUEST_CART,
     productId: productId
+  };
+};
+
+var _transitionCart = function _transitionCart() {
+  return {
+    type: TRANSITION_CART
   };
 }; // thunk
 
@@ -2948,36 +3010,72 @@ var addToCart = function addToCart(product) {
           switch (_context3.prev = _context3.next) {
             case 0:
               _context3.prev = 0;
+              console.log(product);
               userId = product.userId;
               body = {
                 id: product.productId,
                 quantity: product.quantity
               };
-              _context3.next = 5;
+              _context3.next = 6;
               return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("/api/users/".concat(userId, "/orders"), body);
 
-            case 5:
+            case 6:
               dispatch(fetchCart(userId));
-              _context3.next = 11;
+              _context3.next = 12;
               break;
 
-            case 8:
-              _context3.prev = 8;
+            case 9:
+              _context3.prev = 9;
               _context3.t0 = _context3["catch"](0);
               console.log(_context3.t0);
 
-            case 11:
+            case 12:
             case "end":
               return _context3.stop();
           }
         }
-      }, _callee3, null, [[0, 8]]);
+      }, _callee3, null, [[0, 9]]);
     }));
 
     return function (_x3) {
       return _ref3.apply(this, arguments);
     };
   }();
+}; // if there is overlap between localStorage cart and DB user cart, quantity is overwritten with quantity from local storage
+
+var transitionCart = function transitionCart(userId) {
+  return function (dispatch) {
+    try {
+      var lsCart = JSON.parse(guestStorage.guestCart);
+      console.log('guestStorage-----------------------', lsCart);
+      guestStorage.guestCart = []; // get open order (or create new one if does not exist)
+
+      if (lsCart.length > 0) {
+        var _iterator = _createForOfIteratorHelper(lsCart),
+            _step;
+
+        try {
+          for (_iterator.s(); !(_step = _iterator.n()).done;) {
+            var item = _step.value;
+            var product = {
+              userId: userId,
+              productId: item.id,
+              quantity: item.quantity
+            };
+            dispatch(addToCart(product));
+          }
+        } catch (err) {
+          _iterator.e(err);
+        } finally {
+          _iterator.f();
+        }
+      }
+
+      dispatch(_transitionCart());
+    } catch (error) {
+      console.log(error);
+    }
+  };
 };
 var completeGuestOrder = function completeGuestOrder() {
   guestStorage.clear();
@@ -3138,7 +3236,6 @@ var initialState = {
         }));
       }
 
-      console.log(JSON.parse(guestStorage.guestCart), 'THIS IS LOCAL STORAGE AT THE REDUCER');
       return _objectSpread(_objectSpread({}, state), {}, {
         cart: state.cart.filter(function (item) {
           return item.id !== action.productId;
