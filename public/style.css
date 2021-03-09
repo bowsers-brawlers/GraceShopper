@@ -90,6 +90,10 @@ form div {
   padding: 0.2rem;
 }
 
+#cart-form {
+  display: flex;
+  flex-direction: column;
+
 .product-view {
   display: flex;
   flex-direction: column;
@@ -115,4 +119,5 @@ form div {
 .control {
   display: flex;
   flex-direction: row;
+
 }

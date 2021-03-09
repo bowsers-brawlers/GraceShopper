@@ -6,10 +6,10 @@ export const guestStorage = window.localStorage
 const SET_CART = 'SET_CART'
 const COMPLETE_ORDER = 'COMPLETE_ORDER'
 const REMOVE_FROM_CART = 'REMOVE_FROM_CART'
-
 const REMOVE_FROM_GUEST_CART = 'REMOVE_FROM_GUEST_CART'
-
 const GET_ORDER_HISTORY = 'GET_ORDER_HISTORY'
+const TRANSITION_CART = 'TRANSITION_CART'
+
 
 // action creator
 const _addToCart = productsInOrder => {
@@ -38,14 +38,14 @@ const _removeFromGuestCart = productId => {
   }
 }
 
-const _completeGuestOrder = id => {
+const _transitionCart = () => {
   return {
-    type: COMPLETE_GUEST_ORDER,
-    id
+    type: TRANSITION_CART
   }
 }
-// thunk
 
+
+// thunk
 const getOrderHistory = data => {
   return {
     type: GET_ORDER_HISTORY,
@@ -84,15 +84,9 @@ export const fetchGuestCart = cart => {
 
 export const setGuestCart = product => {
   return dispatch => {
-    // const body = {
-    //   id: product.productId,
-    //   quantity: product.quantity,
-    // }
-
     if (guestStorage.guestCart) {
       let guestCart = JSON.parse(guestStorage.guestCart)
       if (guestCart.filter(wine => wine.id === product.id).length > 0) {
-        console.log('item is in local storage change quantity')
         guestCart = guestCart.map(item => {
           if (item.id === product.id) {
             return {...item, quantity: product.quantity}
@@ -131,8 +125,33 @@ export const addToCart = product => {
   }
 }
 
+
+// if there is overlap between localStorage cart and DB user cart, quantity is overwritten with quantity from local storage
+export const transitionCart = userId => {
+  return async dispatch => {
+    try {
+      const lsCart = JSON.parse(guestStorage.guestCart)
+      guestStorage.guestCart = []
+      // get open order (or create new one if does not exist)
+      if (lsCart.length > 0) {
+        for (let item of lsCart) {
+          const product = {
+            userId: userId,
+            productId: item.id,
+            quantity: item.quantity
+          }
+          await dispatch(addToCart(product))
+        }
+      }
+
+      dispatch(_transitionCart())
+    } catch (error) {
+      console.log(error)
+    }
+  }
+}
+
 export const completeGuestOrder = guestCart => {
-  console.log(guestCart, 'GUESTCART FROM COMPLETE GUEST ORDER')
   guestStorage.clear()
   return async dispatch => {
     try {
@@ -155,6 +174,7 @@ export const completeOrder = cartDetails => {
   return async dispatch => {
     try {
       await axios.put(`/api/users/${userId}/orders/${orderId}`, cartDetails)
+      if (userId) await dispatch(fetchOrderHistory(userId))
       dispatch(_completeOrder())
     } catch (error) {
       console.log(error)
@@ -197,6 +217,7 @@ export const removeFromCart = cartDetails => {
     }
   }
 }
+
 // reducer
 const initialState = {
   cart: [],
@@ -226,7 +247,6 @@ export default (state = initialState, action) => {
         ...state,
         cart: state.cart.filter(item => item.productId !== action.productId)
       }
-
     case REMOVE_FROM_GUEST_CART:
       if (guestStorage.guestCart) {
         const guestCart = JSON.parse(guestStorage.guestCart)
@@ -235,11 +255,6 @@ export default (state = initialState, action) => {
           guestCart.filter(item => item.id !== action.productId)
         )
       }
-
-      console.log(
-        JSON.parse(guestStorage.guestCart),
-        'THIS IS LOCAL STORAGE AT THE REDUCER'
-      )
       return {
         ...state,
         cart: state.cart.filter(item => item.id !== action.productId)
