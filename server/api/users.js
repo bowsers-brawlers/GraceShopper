@@ -30,7 +30,6 @@ router.get('/:userId', async (req, res, next) => {
   }
 })
 
-
 // order history
 router.get('/:userId/order-history', async (req, res, next) => {
   try {
@@ -59,9 +58,23 @@ router.get('/:userId/order-history', async (req, res, next) => {
   }
 })
 
-
 // POST add item to cart ------------------------------------------------------
 // order.getProducts() gets the products from the Product model (quantity does not represent quantity the user adds to cart)
+
+router.post('/guest/orders', async (req, res, next) => {
+  try {
+    const order = await Order.create()
+    order.isComplete = true
+    // const cart = req.body
+    // for (let i = 0; i < order.length; i++) {
+    //   const product = await Products.findByPk(cart[i].id)
+    //   await product.update({quantity: product.quantity - order[i].quantity})
+    // }
+    res.json(order)
+  } catch (error) {
+    next(error)
+  }
+})
 router.post('/:userId/orders', async (req, res, next) => {
   try {
     const [order, isMade] = await Order.findOrCreate({
