@@ -37,17 +37,16 @@ const Navbar = ({handleClick, isLoggedIn, isAdmin}) => (
     </h1>
     <nav>
       {isLoggedIn ? (
-        <div>
+        <div className="header-nav">
           {/* The navbar will show these links after you log in */}
           <MainNav />
-          <a href="#" onClick={handleClick}>
-            Logout
-          </a>
-
-          <Link to="/edit">Edit My Account</Link>
-
-          <Link to="/cart">Cart</Link>
-
+          <nav>
+            <a href="#" onClick={handleClick}>
+              Logout
+            </a>
+            <Link to="/edit">Edit My Account</Link>
+            <Link to="/cart">Cart</Link>
+          </nav>
           <AddProductButton isAdmin={isAdmin} />
         </div>
       ) : (

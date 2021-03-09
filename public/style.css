@@ -89,3 +89,17 @@ form div {
   border-radius: 50%;
   padding: 0.2rem;
 }
+
+/* Footer */
+footer {
+  background: darkgray;
+  border-top: black thin black;
+  padding: 20px;
+  margin-top: 20px;
+
+  font-size: 1.4rem;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  justify-items: flex-end;
+}
