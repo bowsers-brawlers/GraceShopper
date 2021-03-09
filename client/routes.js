@@ -6,19 +6,19 @@ import {Login, Signup, UserHome} from './components'
 
 import AllUsers from './components/AllUsers'
 import SingleUser from './components/SingleUser'
+import EditUser from './components/EditUser'
+
 import AllProducts from './components/Products'
 import SingleProduct from './components/SingleProduct'
-import Cart from './components/Cart'
-
-import GuestCart from './components/GuestCart'
-
-import {fetchAllProducts} from './store/products'
-import {me} from './store'
+import FilterProduct from './components/Products/FilterProduct'
 import CreateProduct from './components/Products/CreateProduct'
 import EditProduct from './components/Products/EditProduct'
 
-import {fetchSingleUser} from './store/singleUser'
-import EditUser from './components/EditUser'
+import GuestCart from './components/GuestCart'
+import Cart from './components/Cart'
+
+import {fetchAllProducts, filteredProducts} from './store/products'
+import {me} from './store'
 
 /**
  * COMPONENT
@@ -30,7 +30,6 @@ class Routes extends Component {
 
   render() {
     const {isLoggedIn, loggedInUserId, isAdmin} = this.props
-
     return (
       <Switch>
         {/* Routes placed here are available to all visitors */}
@@ -50,6 +49,10 @@ class Routes extends Component {
           render={routeProps => (
             <SingleProduct {...routeProps} isAdmin={isAdmin} />
           )}
+        />
+        <Route
+          path="/:categorySlug"
+          render={routeProps => <FilterProduct {...routeProps} />}
         />
 
         {isLoggedIn && (
@@ -112,7 +115,8 @@ const mapState = state => {
     isLoggedIn: !!state.user.id,
     loggedInUserId: state.user.id,
     isAdmin: state.user.isAdmin,
-    products: state.products
+    products: state.products,
+    category: state.category
   }
 }
 
