@@ -62,7 +62,7 @@ Products.hasMany(orderDetails)
 //   'createOrder'
 // ]
 
-console.log(Object.keys(User.prototype))
+//console.log(Object.keys(User.prototype))
 
 module.exports = {
   User,

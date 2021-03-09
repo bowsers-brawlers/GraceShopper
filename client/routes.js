@@ -14,7 +14,6 @@ import {fetchAllProducts} from './store/products'
 import {me} from './store'
 import CreateProduct from './components/Products/CreateProduct'
 import EditProduct from './components/Products/EditProduct'
-import {fetchSingleUser} from './store/singleUser'
 import EditUser from './components/EditUser'
 
 /**
