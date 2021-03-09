@@ -1,6 +1,8 @@
 const router = require('express').Router()
 const Sequelize = require('sequelize')
 
+const {protectedRoute, protectedId} = require('./protect.js')
+
 const {Op} = Sequelize
 
 const {User, Order, Products, orderDetails} = require('../db/models')
@@ -8,7 +10,7 @@ module.exports = router
 
 // base path: /api/users
 
-router.get('/', async (req, res, next) => {
+router.get('/', protectedRoute, async (req, res, next) => {
   try {
     const users = await User.findAll({
       attributes: ['id', 'email', 'firstName', 'lastName']
@@ -19,7 +21,7 @@ router.get('/', async (req, res, next) => {
   }
 })
 
-router.get('/:userId', async (req, res, next) => {
+router.get('/:userId', protectedId, async (req, res, next) => {
   try {
     const user = await User.findByPk(req.params.userId, {
       attributes: ['id', 'email', 'firstName', 'lastName']
@@ -31,7 +33,7 @@ router.get('/:userId', async (req, res, next) => {
 })
 
 // order history
-router.get('/:userId/order-history', async (req, res, next) => {
+router.get('/:userId/order-history', protectedId, async (req, res, next) => {
   try {
     const {userId} = req.params
     const userOrders = await Order.findAll({
@@ -61,6 +63,7 @@ router.get('/:userId/order-history', async (req, res, next) => {
 // POST add item to cart ------------------------------------------------------
 // order.getProducts() gets the products from the Product model (quantity does not represent quantity the user adds to cart)
 
+
 router.post('/guest/orders', async (req, res, next) => {
   try {
     const order = await Order.create()
@@ -75,7 +78,9 @@ router.post('/guest/orders', async (req, res, next) => {
     next(error)
   }
 })
-router.post('/:userId/orders', async (req, res, next) => {
+
+router.post('/:userId/orders', protectedId, async (req, res, next) => {
+
   try {
     const [order, isMade] = await Order.findOrCreate({
       where: {
@@ -103,7 +108,7 @@ router.post('/:userId/orders', async (req, res, next) => {
 })
 
 // GET items from cart ------------------------------------------
-router.get('/:userId/orders', async (req, res, next) => {
+router.get('/:userId/orders', protectedId, async (req, res, next) => {
   try {
     const {userId} = req.params
     const order = await Order.findOne({
@@ -132,28 +137,32 @@ router.get('/:userId/orders', async (req, res, next) => {
 })
 
 // update cart
-router.put('/:userId/orders/:orderId/update', async (req, res, next) => {
-  try {
-    const {order} = req.body
-    const {orderId} = req.params
-    let product
-    for (let i = 0; i < order.length; i++) {
-      product = await orderDetails.findOne({
-        where: {
-          orderId: orderId,
-          productId: order[i].productId
-        }
-      })
-      await product.update({quantity: order[i].quantity})
+router.put(
+  '/:userId/orders/:orderId/update',
+  protectedId,
+  async (req, res, next) => {
+    try {
+      const {order} = req.body
+      const {orderId} = req.params
+      let product
+      for (let i = 0; i < order.length; i++) {
+        product = await orderDetails.findOne({
+          where: {
+            orderId: orderId,
+            productId: order[i].productId
+          }
+        })
+        await product.update({quantity: order[i].quantity})
+      }
+      res.sendStatus(201)
+    } catch (error) {
+      next(error)
     }
-    res.sendStatus(201)
-  } catch (error) {
-    next(error)
   }
-})
+)
 
 // PLACE ORDER
-router.put('/:userId/orders/:orderId', async (req, res, next) => {
+router.put('/:userId/orders/:orderId', protectedId, async (req, res, next) => {
   try {
     const {order} = req.body
     for (let i = 0; i < order.length; i++) {
@@ -179,6 +188,7 @@ router.put('/:userId/orders/:orderId', async (req, res, next) => {
 
 router.delete(
   '/:userId/order/:orderId/products/:productId',
+  protectedId,
   async (req, res, next) => {
     try {
       const {userId, orderId, productId} = req.params

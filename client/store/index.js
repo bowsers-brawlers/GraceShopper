@@ -8,6 +8,7 @@ import singleUser from './singleUser'
 import products from './products'
 import allUsers from './allUsers'
 import cart from './cart'
+import category from './category'
 
 const reducer = combineReducers({
   user,
@@ -15,7 +16,8 @@ const reducer = combineReducers({
   allUsers,
   singleUser,
   singleProductReducer,
-  cart
+  cart,
+  category
 })
 
 const middleware = composeWithDevTools(
