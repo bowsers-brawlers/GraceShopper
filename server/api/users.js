@@ -63,7 +63,6 @@ router.get('/:userId/order-history', protectedId, async (req, res, next) => {
 // POST add item to cart ------------------------------------------------------
 // order.getProducts() gets the products from the Product model (quantity does not represent quantity the user adds to cart)
 
-
 router.post('/guest/orders', async (req, res, next) => {
   try {
     const order = await Order.create()
@@ -80,7 +79,6 @@ router.post('/guest/orders', async (req, res, next) => {
 })
 
 router.post('/:userId/orders', protectedId, async (req, res, next) => {
-
   try {
     const [order, isMade] = await Order.findOrCreate({
       where: {

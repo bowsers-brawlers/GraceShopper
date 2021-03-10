@@ -56,7 +56,16 @@ export class SingleProduct extends Component {
       return (
         <section className="section product-view">
           {this.props.isAdmin === 'true' ? (
-            <Link to={`/products/${product.id}/edit`}> Edit Product</Link>
+            <div className="edit-product">
+              <Link
+                to={`/products/${product.id}/edit`}
+                className="button is-warning"
+              >
+                {' '}
+                Edit Product
+              </Link>
+              <br />
+            </div>
           ) : (
             ''
           )}

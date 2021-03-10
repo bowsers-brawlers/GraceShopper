@@ -66,9 +66,7 @@ Products.belongsTo(Category, {as: 'category'})
 //   'createOrder'
 // ]
 
-
 //console.log(Object.keys(User.prototype))
-
 
 module.exports = {
   User,

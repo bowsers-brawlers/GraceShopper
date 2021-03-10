@@ -26,6 +26,9 @@ export function AllProducts({products}) {
 export function AllProductsContainer({products}) {
   return (
     <main className="content">
+      <div className="product-category">
+        <h1>Grace Shopper Wine Store</h1>
+      </div>
       <div className="all-products">
         <AllProducts products={products} />
       </div>

@@ -10,7 +10,6 @@ const REMOVE_FROM_GUEST_CART = 'REMOVE_FROM_GUEST_CART'
 const GET_ORDER_HISTORY = 'GET_ORDER_HISTORY'
 const TRANSITION_CART = 'TRANSITION_CART'
 
-
 // action creator
 const _addToCart = productsInOrder => {
   return {
@@ -43,7 +42,6 @@ const _transitionCart = () => {
     type: TRANSITION_CART
   }
 }
-
 
 // thunk
 const getOrderHistory = data => {
@@ -124,7 +122,6 @@ export const addToCart = product => {
     }
   }
 }
-
 
 // if there is overlap between localStorage cart and DB user cart, quantity is overwritten with quantity from local storage
 export const transitionCart = userId => {
