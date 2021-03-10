@@ -25,8 +25,10 @@ export class FilterProductContainer extends Component {
     const {category} = this.props
 
     return (
-      <section>
-        <h1>{this.props.match.params.categorySlug.split('-').join(' ')}</h1>
+      <section className="all-products">
+        <div className="product-category">
+          <h1>{this.props.match.params.categorySlug.split('-').join(' ')}</h1>
+        </div>
         {category.map(product => (
           <section key={product.id} className="product-container">
             <Link to={`/products/${product.id}`}>

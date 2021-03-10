@@ -19,15 +19,10 @@ class GuestCart extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this)
   }
   componentDidMount() {
-    // console.dir(JSON.parse(guestStorage.guestCart))
-
     if (guestStorage.guestCart) {
-      console.log(JSON.parse(guestStorage.guestCart), 'THIS IS THE GUEST CART')
       this.props.fetchGuestCart(JSON.parse(guestStorage.guestCart))
-
       this.setState(state => ({
         ...state,
-
         order: JSON.parse(guestStorage.guestCart)
       }))
     }
@@ -55,7 +50,8 @@ class GuestCart extends React.Component {
       }
     }
     if (submit) {
-      await this.props.completeGuestOrder()
+      await this.props.completeGuestOrder(JSON.parse(guestStorage.guestCart))
+
       this.setState(state => ({
         ...state,
         order: []
@@ -65,8 +61,6 @@ class GuestCart extends React.Component {
   handleChange(evt, productId) {
     guestStorage.setItem('guestCart', JSON.stringify(this.state.order))
     evt.persist()
-    console.log(+evt.target.value, 'EVT')
-    console.log(productId, 'PRODUCTIDA')
     this.setState(
       state => ({
         ...state,
@@ -86,13 +80,17 @@ class GuestCart extends React.Component {
   }
   render() {
     const {products} = this.props
-    console.log('Guestcart is rerendering ====================================')
-    console.log(products, 'THIS IS PRODUCTS')
-    console.log(this.state, 'THIS IS STATTE')
-    console.log(this.props, 'THIS IS PROPS')
-    // console.log(JSON.parse(guestStorage.guestCart), 'THIS IS LOCALSTORAGE')
-
-    const emptyCart = <div>The guest cart is empty</div>
+    const emptyCart = this.props.guestOrder.id ? (
+      <div>
+        {' '}
+        Order ID: {this.props.guestOrder.id} on{' '}
+        {this.props.guestOrder.createdAt}
+      </div>
+    ) : (
+      <div>
+        <div>The guest cart is empty</div>
+      </div>
+    )
     return this.props.cart.length === 0 ||
       this.props.products.length === 0 ||
       this.state.order.length === 0 ? (
@@ -135,7 +133,7 @@ class GuestCart extends React.Component {
             </button>
           </div>
         ))}
-        {/* {this.props.cart.length > 0 ? (
+        {this.props.cart.length > 0 ? (
           <button
             type="submit"
             disabled={this.props.cart.length < 1 ? 'disabled' : ''}
@@ -145,7 +143,7 @@ class GuestCart extends React.Component {
           </button>
         ) : (
           emptyCart
-        )} */}
+        )}
       </form>
     )
   }
@@ -154,7 +152,7 @@ class GuestCart extends React.Component {
 const mapState = state => {
   return {
     cart: state.cart.cart,
-
+    guestOrder: state.cart.guestOrder,
     products: state.products,
     singleProduct: state.singleProductReducer
   }

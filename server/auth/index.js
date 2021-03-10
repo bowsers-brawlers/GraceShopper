@@ -34,7 +34,7 @@ router.post('/signup', async (req, res, next) => {
 
 router.put('/:userId', async (req, res, next) => {
   try {
-    console.log('req.BODY', console.log(req.body))
+    //console.log('req.BODY', console.log(req.body))
     const user = await User.findByPk(req.body.id)
     res.send(await user.update(req.body))
   } catch (err) {

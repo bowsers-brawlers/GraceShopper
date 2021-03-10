@@ -31,76 +31,84 @@ class Routes extends Component {
   render() {
     const {isLoggedIn, loggedInUserId, isAdmin} = this.props
     return (
-      <Switch>
-        {/* Routes placed here are available to all visitors */}
-        <Route path="/login" component={Login} />
-        <Route path="/signup" component={Signup} />
-        {/* <Route
+      <>
+        <Switch>
+          {/* Routes placed here are available to all visitors */}
+          <Route path="/login" component={Login} />
+          <Route path="/signup" component={Signup} />
+          {/* <Route
           path="/"
           render={() => <AllProducts products={this.props.products} />}
         /> */}
 
-        <Route path="/guest-cart" component={GuestCart} />
+          <Route path="/guest-cart" component={GuestCart} />
 
-        {/** EDIT PRODUCT **/}
-        <Route exact path="/products/:productId/edit" component={EditProduct} />
-        <Route
-          path="/products/:productId"
-          render={routeProps => (
-            <SingleProduct {...routeProps} isAdmin={isAdmin} />
+          {/** EDIT PRODUCT **/}
+          <Route
+            exact
+            path="/products/:productId/edit"
+            component={EditProduct}
+          />
+          <Route
+            path="/products/:productId"
+            render={routeProps => (
+              <SingleProduct {...routeProps} isAdmin={isAdmin} />
+            )}
+          />
+          <Route
+            exact
+            path="/category/:categorySlug"
+            render={routeProps => <FilterProduct {...routeProps} />}
+          />
+          {isLoggedIn && (
+            <Switch>
+              {/* Routes placed here are only available after logging in */}
+              <Route path="/home" component={UserHome} />
+              <Route
+                path="/cart"
+                render={routeProps => (
+                  <Cart {...routeProps} loggedInUserId={loggedInUserId} />
+                )}
+              />
+              <Route
+                path="/all-users/:userId"
+                component={SingleUser}
+                // render={routeProps => <SingleUser {...routeProps} />}
+              />
+              <Route
+                path="/edit"
+                render={routeProps => (
+                  <EditUser {...routeProps} loggedInUserId={loggedInUserId} />
+                )}
+              />
+              <Route
+                path="/all-users"
+                render={routeProps => (
+                  <AllUsers {...routeProps} loggedInUserId={loggedInUserId} />
+                )}
+              />
+              <Route
+                path="/create-product"
+                render={routeProps => (
+                  <CreateProduct {...routeProps} isAdmin={isAdmin} />
+                )}
+              />
+              <Route
+                path="/"
+                render={() => <AllProducts products={this.props.products} />}
+              />
+            </Switch>
           )}
-        />
-        <Route
-          path="/:categorySlug"
-          render={routeProps => <FilterProduct {...routeProps} />}
-        />
 
-        {isLoggedIn && (
-          <Switch>
-            {/* Routes placed here are only available after logging in */}
-            <Route path="/home" component={UserHome} />
-            <Route
-              path="/cart"
-              render={routeProps => (
-                <Cart {...routeProps} loggedInUserId={loggedInUserId} />
-              )}
-            />
-            <Route
-              path="/all-users/:userId"
-              component={SingleUser}
-              // render={routeProps => <SingleUser {...routeProps} />}
-            />
-            <Route
-              path="/edit"
-              render={routeProps => (
-                <EditUser {...routeProps} loggedInUserId={loggedInUserId} />
-              )}
-            />
-            <Route
-              path="/all-users"
-              render={routeProps => (
-                <AllUsers {...routeProps} loggedInUserId={loggedInUserId} />
-              )}
-            />
-            <Route
-              path="/create-product"
-              render={routeProps => (
-                <CreateProduct {...routeProps} isAdmin={isAdmin} />
-              )}
-            />
-            <Route
-              path="/"
-              render={() => <AllProducts products={this.props.products} />}
-            />
-          </Switch>
-        )}
-        <Route
-          path="/"
-          render={() => <AllProducts products={this.props.products} />}
-        />
-        {/* Displays our Login component as a fallback */}
-        <Route component={Login} />
-      </Switch>
+          <Route
+            path="/"
+            render={() => <AllProducts products={this.props.products} />}
+          />
+
+          {/* Displays our Login component as a fallback */}
+          <Route component={Login} />
+        </Switch>
+      </>
     )
   }
 }

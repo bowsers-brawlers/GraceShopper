@@ -2,7 +2,6 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {fetchSingleProduct} from '../store/singleProduct'
 
-
 import {addToCart, setGuestCart} from '../store/cart'
 
 import {Link} from 'react-router-dom'
@@ -10,7 +9,7 @@ import {Link} from 'react-router-dom'
 export class SingleProduct extends Component {
   constructor(props) {
     super(props)
-    this.state = {quantity: 1}
+    this.state = {quantity: 1, checkedOut: false}
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
   }
@@ -27,7 +26,6 @@ export class SingleProduct extends Component {
         productId: this.props.singleProduct.id,
         quantity: this.state.quantity
       })
-
     } else {
       this.props.setGuestCart({
         id: this.props.singleProduct.id,
@@ -37,8 +35,11 @@ export class SingleProduct extends Component {
         quantity: this.state.quantity,
         quantityInDB: this.props.singleProduct.quantity
       })
-
     }
+    this.setState(state => ({
+      ...state,
+      checkedOut: true
+    }))
   }
   handleChange(evt) {
     evt.persist()
@@ -50,38 +51,93 @@ export class SingleProduct extends Component {
   }
   render() {
     const product = this.props.singleProduct
-    const {quantity} = this.state
+    const {quantity, checkedOut} = this.state
     if (product) {
       return (
         <section className="section product-view">
           {this.props.isAdmin === 'true' ? (
-            <Link to={`/products/${product.id}/edit`}> Edit Product</Link>
+            <div className="edit-product">
+              <Link
+                to={`/products/${product.id}/edit`}
+                className="button is-warning"
+              >
+                {' '}
+                Edit Product
+              </Link>
+              <br />
+            </div>
           ) : (
             ''
           )}
 
-          <figure>
-            <img src={product.imageUrl} />
-          </figure>
           <div className="product-info">
-            <div className="product-name">{product.name}</div>
-            <div className="product-description">{product.description}</div>
-            <div className="product-price"> {product.price / 100} </div>
-            <div className="product-quantity">{product.quantity}</div>
+            <div>
+              <div className="product-name title">{product.name}</div>
+              <figure>
+                <img src={product.imageUrl} />
+              </figure>
+            </div>
+            <div>
+              <div className="product-description">
+                <span>
+                  <strong>Description: </strong>
+                </span>
+                <p>{product.description}</p>
+              </div>
+              <div className="product-price">
+                <span>
+                  <strong>Price: </strong>$
+                </span>
+                <span>{product.price / 100}</span>
+              </div>
+              <div className="product-quantity">
+                <span>
+                  <strong>Quantity in stock: </strong>
+                </span>
+                <span>{product.quantity}</span>
+              </div>
+            </div>
           </div>
           <form id="single-product-form" onSubmit={this.handleSubmit}>
-            <label htmlFor="quantity">Quantity</label>
-            <input
-              name="quantity"
-              value={quantity}
-              onChange={this.handleChange}
-              type="number"
-              min="1"
-              max={product.quantity}
-            />
-            <button type="submit" onSubmit={this.handleSubmit}>
-              Add to cart!
-            </button>
+            <span>
+              <label htmlFor="quantity" className="subtitle">
+                {!checkedOut ? (
+                  quantity > 1 ? (
+                    'You party animal'
+                  ) : (
+                    'Quantity'
+                  )
+                ) : (
+                  <span className="tag is-success">added to cart!</span>
+                )}
+              </label>
+              <div className="control">
+                <div className="select">
+                  <select
+                    name="quantity"
+                    value={quantity}
+                    onChange={this.handleChange}
+                    min="1"
+                    max={product.quantity}
+                  >
+                    {Array.from({length: product.quantity}).map((q, idx) => (
+                      <option key={idx + 1} value={idx + 1}>
+                        {+(idx + 1)}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+              <p className="control">
+                <button
+                  type="submit"
+                  onSubmit={this.handleSubmit}
+                  className="button is-primary"
+                >
+                  Add to cart!
+                </button>
+              </p>
+            </span>
           </form>
         </section>
       )
@@ -105,7 +161,6 @@ const mapDispatch = dispatch => {
 
     addToCart: product => dispatch(addToCart(product)),
     setGuestCart: product => dispatch(setGuestCart(product))
-
   }
 }
 

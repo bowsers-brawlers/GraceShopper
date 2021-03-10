@@ -6,12 +6,13 @@ import {
   fetchCart,
   completeOrder,
   updateCart,
-  removeFromCart
+  removeFromCart,
+  transitionCart,
+  guestStorage
 } from '../store/cart'
 import {fetchSingleProduct} from '../store/singleProduct'
 
 import OrderHistory from './OrderHistory'
-
 
 class Cart extends React.Component {
   constructor(props) {
@@ -21,12 +22,22 @@ class Cart extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this)
   }
   async componentDidMount() {
+    // transition cart first (before fetch) -> add items to cart (create a new order if does not exist)
+    // if there are any items in localStorage to add to cart
+    // populate into orderDetails model
+    if (guestStorage.guestCart) {
+      await this.props.transitionCart(this.props.loggedInUserId)
+    }
+    // need this so product from Products model gets attached to order
+    // pull products from DB
     await this.props.fetchCart(this.props.loggedInUserId)
-    this.setState(state => ({
-      ...state,
-      user: this.props.user,
-      order: this.props.cart
-    }))
+    this.setState(state => {
+      return {
+        ...state,
+        user: this.props.user,
+        order: this.props.cart
+      }
+    })
   }
   componentWillUnmount() {
     if (this.state.order.length !== 0) {
@@ -73,11 +84,9 @@ class Cart extends React.Component {
     }))
   }
   render() {
-    console.log('cart is rerendering ====================================')
     const {products} = this.props
     const emptyCart = <div>{this.props.user.firstName}'s cart is empty</div>
     return this.state.order.length === 0 ? (
-
       <div>
         {emptyCart}
         <hr />
@@ -89,30 +98,32 @@ class Cart extends React.Component {
         <form id="cart-form" onSubmit={this.handleSubmit}>
           {this.props.cart.map((item, idx) => (
             <div key={item.productId}>
-              <div>Name: {item.product.name}</div>
-              <label htmlFor={`cart-item-${item.productId}`}>
-                Quantity{' '}
-                <b>
-                  {item.quantity >
-                  products.filter(product => product.id === item.productId)[0]
-                    .quantity
-                    ? `THERE ARE ${
-                        products.filter(
-                          product => product.id === item.productId
-                        )[0].quantity
-                      } LEFT IN STOCK`
-                    : ''}
-                </b>
-              </label>
-              <input
-                name={`cart-item-${item.productId}`}
-                value={this.state.order[idx].quantity}
-                type="number"
-                min="0"
-                max={item.product.quantity}
-                required="required"
-                onChange={evt => this.handleChange(evt, item.productId)}
-              />
+              <div id="cart-item">
+                <div>Name: {item.product.name}</div>
+                <label htmlFor={`cart-item-${item.productId}`}>
+                  Quantity
+                  <b>
+                    {item.quantity >
+                    products.filter(product => product.id === item.productId)[0]
+                      .quantity
+                      ? `THERE ARE ${
+                          products.filter(
+                            product => product.id === item.productId
+                          )[0].quantity
+                        } LEFT IN STOCK`
+                      : ''}
+                  </b>
+                </label>
+                <input
+                  name={`cart-item-${item.productId}`}
+                  value={this.state.order[idx].quantity}
+                  type="number"
+                  min="0"
+                  max={item.product.quantity}
+                  required="required"
+                  onChange={evt => this.handleChange(evt, item.productId)}
+                />
+              </div>
               <div>Price: ${item.price / 100}</div>
               <button
                 type="button"
@@ -128,23 +139,24 @@ class Cart extends React.Component {
               </button>
             </div>
           ))}
-          {this.props.cart.length > 0 ? (
-            <button
-              type="submit"
-              disabled={this.props.cart.length >= 1 ? '' : 'disabled'}
-              onSubmit={this.handleSubmit}
-            >
-              Send me my Wine!
-            </button>
-          ) : (
-            emptyCart
-          )}
+          <div id="order-submit-button">
+            {this.props.cart.length > 0 ? (
+              <button
+                type="submit"
+                disabled={this.props.cart.length >= 1 ? '' : 'disabled'}
+                onSubmit={this.handleSubmit}
+              >
+                Send me my Wine!
+              </button>
+            ) : (
+              emptyCart
+            )}
+          </div>
         </form>
         <hr />
         <div>Order History</div>
         <OrderHistory />
       </div>
-
     )
   }
 }
@@ -164,7 +176,8 @@ const mapDispatch = dispatch => {
     completeOrder: cartdetails => dispatch(completeOrder(cartdetails)),
     updateCart: cartdetails => dispatch(updateCart(cartdetails)),
     fetchSingleProduct: productId => dispatch(fetchSingleProduct(productId)),
-    removeFromCart: cartDetails => dispatch(removeFromCart(cartDetails))
+    removeFromCart: cartDetails => dispatch(removeFromCart(cartDetails)),
+    transitionCart: userId => dispatch(transitionCart(userId))
   }
 }
 export default withRouter(connect(mapState, mapDispatch)(Cart))
