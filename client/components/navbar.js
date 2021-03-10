@@ -46,83 +46,97 @@ const MainNav = () => {
   )
 }
 
-const Navbar = ({handleClick, isLoggedIn, isAdmin}) => (
-  <header className="section">
-    <nav className="navbar" role="navigation" aria-label="main navigation">
-      <div className="navbar-brand">
-        <h1 className="title">
-          <Link to="/" className="navbar-item">
-            Wine
-          </Link>
-        </h1>
+// const Navbar = ({handleClick, isLoggedIn, isAdmin}) => (
+class Navbar extends React.Component {
+  constructor() {
+    super()
+  }
+  handleChange(evt) {
+    this.setState({
+      [evt.target.name]: evt.target.value
+    })
+  }
+  render() {
+    const {handleClick, isLoggedIn, isAdmin} = this.props
+    return (
+      <header className="section">
+        <nav className="navbar" role="navigation" aria-label="main navigation">
+          <div className="navbar-brand">
+            <h1 className="title">
+              <Link to="/" className="navbar-item">
+                Wine
+              </Link>
+            </h1>
 
-        <a
-          role="button"
-          className="navbar-burger"
-          aria-label="menu"
-          aria-expanded="false"
-          data-target="navbarBasicExample"
-        >
-          <span aria-hidden="true" />
-          <span aria-hidden="true" />
-          <span aria-hidden="true" />
-        </a>
-      </div>
-      {isLoggedIn ? (
-        <div className="navbar-menu">
-          {/* The navbar will show these links after you log in */}
-          <div className="navbar-start">
-            <MainNav />
+            <a
+              role="button"
+              className="navbar-burger"
+              aria-label="menu"
+              aria-expanded="false"
+              data-target="navbarBasicExample"
+            >
+              <span aria-hidden="true" />
+              <span aria-hidden="true" />
+              <span aria-hidden="true" />
+            </a>
           </div>
-          <div className="navbar-end">
-            <div className="navbar-item">
-              <div className="buttons" style={{'flex-direction': 'column'}}>
-                <div>
-                  <a
-                    className="button is-danger is-light"
-                    href="#"
-                    onClick={handleClick}
-                  >
-                    Logout
-                  </a>
-                  <Link className="button" to="/edit">
-                    Edit My Account
-                  </Link>
-                  <Link className="button is-success" to="/cart">
-                    Cart
-                  </Link>
+          {isLoggedIn ? (
+            <div className="navbar-menu">
+              {/* The navbar will show these links after you log in */}
+              <div className="navbar-start">
+                <MainNav />
+              </div>
+              <div className="navbar-end">
+                <div className="navbar-item">
+                  <div className="buttons" style={{'flex-direction': 'column'}}>
+                    <div>
+                      <a
+                        className="button is-danger is-light"
+                        href="#"
+                        onClick={handleClick}
+                      >
+                        Logout
+                      </a>
+                      <Link className="button" to="/edit">
+                        Edit My Account
+                      </Link>
+                      <Link className="button is-success" to="/cart">
+                        Cart
+                      </Link>
+                    </div>
+                    <AdminNav isAdmin={isAdmin} />
+                  </div>
                 </div>
-                <AdminNav isAdmin={isAdmin} />
               </div>
             </div>
-          </div>
-        </div>
-      ) : (
-        <div className="navbar-menu">
-          <div className="navbar-start">
-            <MainNav />
-          </div>
-          <div className="navbar-end">
-            <div className="navbar-item">
-              <div className="buttons">
-                {/* The navbar will show these links before you log in */}
-                <Link className="button" to="/login">
-                  Login
-                </Link>
-                <Link className="button" to="/signup">
-                  Sign Up
-                </Link>
-                <Link className="button" to="/guest-cart">
-                  Cart
-                </Link>
+          ) : (
+            <div className="navbar-menu">
+              <div className="navbar-start">
+                <MainNav />
+              </div>
+              <div className="navbar-end">
+                <div className="navbar-item">
+                  <div className="buttons">
+                    {/* The navbar will show these links before you log in */}
+                    <Link className="button" to="/login">
+                      Login
+                    </Link>
+                    <Link className="button" to="/signup">
+                      Sign Up
+                    </Link>
+                    <Link className="button" to="/guest-cart">
+                      Cart
+                    </Link>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-      )}
-    </nav>
-  </header>
-)
+          )}
+        </nav>
+      </header>
+    )
+  }
+}
 
 /**
  * CONTAINER

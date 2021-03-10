@@ -16,11 +16,11 @@ async function seed() {
     })
   )
   const categorySeed = (module.exports = [
-    {name: 'Red Wine', slug: 'red-wine'},
-    {name: 'White Wine', slug: 'white-wine'},
-    {name: 'Rose Wine', slug: 'rose-wine'},
-    {name: 'Champagne & Sparkling Wine', slug: 'sparkling'},
-    {name: 'Port', slug: 'port'}
+    {name: 'Red Wine', slug: 'red-wine'}, // id: 1
+    {name: 'White Wine', slug: 'white-wine'}, // id: 4
+    {name: 'Rose Wine', slug: 'rose-wine'}, // id: 5
+    {name: 'Sparkling Wine', slug: 'sparkling'}, // id: 2
+    {name: 'Port', slug: 'port'} // id: 3
   ])
 
   const categories = await Promise.all(
